@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Lab Pesawat Sederhana | IPA Kelas 8</title>
+<meta name="description" content="Virtual Lab Pesawat Sederhana: tuas, katrol, bidang miring, dan roda berporos untuk IPA Kelas 8 SMP. Bisa disematkan (embed) di website, Google Sites, Moodle, atau LMS mana pun.">
+<meta name="theme-color" content="#DCE3E8">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lab Pesawat Sederhana">
+<meta property="og:title" content="Lab Pesawat Sederhana | IPA Kelas 8">
+<meta property="og:description" content="Virtual lab interaktif: tuas, katrol, bidang miring, dan roda berporos. Siap disematkan di website atau LMS.">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#DCE3E8; --hole:#C3CDD6; --ink:#1B2B3A; --ink2:#4B5C6C; --paper:#FBFCFD; --paper2:#EEF2F5;
+  --yellow:#FFC21A; --yellow-l:#FFF3D1; --blue:#1C6FD6; --blue-l:#E0ECFB; --red:#D93A2B; --red-l:#FBE3E0;
+  --green:#1F9254; --green-l:#DDF2E6;
+  --r-lg:22px; --r-md:14px; --r-sm:10px;
+  --display:'Bricolage Grotesque','Lexend',system-ui,sans-serif;
+  --body:'Lexend',system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(14px, min(1.05vw, 1.95vh), 26px);height:100%}
+body{font-family:var(--body);color:var(--ink);background-color:var(--wall);
+  background-image:radial-gradient(circle at center, var(--hole) 0 .16rem, transparent .2rem);
+  background-size:1.5rem 1.5rem;height:100%;height:100vh;height:100dvh;min-height:100%;overflow:hidden;line-height:1.4;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+input[type=text]{font:inherit;-webkit-user-select:text;user-select:text}
+:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+.app{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100%}
+
+/* ===== header ===== */
+.top{display:flex;align-items:center;gap:.7rem;padding:.7rem 1.2rem .45rem}
+.brand{display:flex;align-items:center;gap:.75rem;margin-right:auto}
+.brand svg{width:2.9rem;height:2.9rem;flex:none}
+.brand h1{font-family:var(--display);font-weight:800;font-size:1.8rem;letter-spacing:-.01em;line-height:1}
+.brand small{display:block;font-size:.85rem;color:var(--ink2);font-weight:500;margin-top:.25rem}
+
+/* ===== buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.1rem;padding:0 1.1rem;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--paper);font-weight:600;font-size:1rem;box-shadow:0 .25rem 0 var(--ink);transition:transform .07s ease,box-shadow .07s ease;white-space:nowrap}
+.btn:active{transform:translateY(.25rem);box-shadow:0 0 0 var(--ink)}
+.btn.primary{background:var(--yellow)}
+.btn.ghost{box-shadow:none;border-width:2px;background:transparent}
+.btn.ghost:active{transform:none;background:var(--paper2)}
+.btn.sm{min-height:2.7rem;padding:0 .8rem;font-size:.92rem}
+.btn.wide{width:100%}
+.btn[aria-pressed="true"]{background:var(--ink);color:#fff}
+.btn svg{width:1.3em;height:1.3em;flex:none}
+#btn-pop{display:none}
+body.embedded #btn-pop{display:inline-flex}
+
+/* ===== lab layout ===== */
+main{min-height:0;position:relative}
+.view{display:none;height:100%;min-height:0}
+.view.active{display:grid}
+.lab{grid-template-columns:minmax(0,1fr) 25rem;gap:1rem;padding:.25rem 1.2rem .6rem}
+.stagecol{display:flex;flex-direction:column;gap:.6rem;min-height:0}
+.mission{display:flex;align-items:center;gap:1.1rem}
+.mission h2{font-family:var(--display);font-weight:800;font-size:2.1rem;line-height:1;white-space:nowrap}
+.mission p{font-size:1rem;color:var(--ink2);max-width:68ch}
+.stage{position:relative;flex:1;min-height:0;background:var(--paper);border:3px solid var(--ink);border-radius:var(--r-lg);overflow:hidden}
+.stage svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.status{position:absolute;top:.8rem;right:.8rem;padding:.55rem 1.15rem;border-radius:999px;border:3px solid var(--ink);background:var(--paper);font-weight:700;font-size:1.1rem;pointer-events:none;max-width:60%}
+.status.ok{background:var(--green);color:#fff}
+.status.warn{background:var(--yellow)}
+.status.bad{background:var(--red-l);color:var(--red);border-color:var(--red)}
+.hint{position:absolute;left:.8rem;top:.8rem;font-size:.88rem;color:var(--ink2);background:rgba(251,252,253,.92);padding:.35rem .7rem;border-radius:var(--r-sm);pointer-events:none}
+.bubble{position:absolute;left:.8rem;bottom:.8rem;max-width:36rem;background:var(--ink);color:#fff;border-radius:var(--r-md);padding:.9rem 3.4rem .95rem 1.1rem;font-size:1rem;display:none}
+.bubble.show{display:block}
+.bubble b{display:block;font-family:var(--display);font-size:1.3rem;margin-bottom:.2rem;color:var(--yellow)}
+.bubble button{position:absolute;top:.35rem;right:.35rem;width:2.8rem;height:2.8rem;border:none;background:transparent;color:#fff;font-size:1.6rem;border-radius:50%}
+
+.formula{display:flex;align-items:center;gap:.55rem 1.6rem;flex-wrap:wrap;background:var(--ink);color:#fff;border-radius:var(--r-md);padding:.65rem 1.1rem;font-size:1.08rem;min-height:3.6rem}
+.formula .eq{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.k{color:#9FB0BF;font-size:.88rem}
+.tok{display:inline-block;padding:.05rem .5rem;border-radius:.4rem;font-weight:600;font-variant-numeric:tabular-nums}
+.tok.w{background:var(--red)} .tok.f{background:var(--blue)} .tok.y{background:var(--yellow);color:var(--ink)}
+.big{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
+
+.examples{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.examples>span{font-weight:600;margin-right:.2rem}
+.chip{min-height:2.8rem;padding:0 1rem;border-radius:999px;border:2px solid var(--ink);background:var(--paper);font-weight:500;font-size:.95rem}
+.chip:active{background:var(--yellow)}
+
+/* ===== panel ===== */
+.panel{display:flex;flex-direction:column;min-height:0;background:var(--paper);border:3px solid var(--ink);border-radius:var(--r-lg);overflow:hidden}
+.pbody{flex:1;min-height:0;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:1.05rem;overscroll-behavior:contain;touch-action:pan-y}
+.pfoot{display:grid;grid-template-columns:1fr auto;gap:.6rem;padding:.8rem 1rem;border-top:2px dashed var(--hole);background:var(--paper2)}
+.ctl h3{font-size:.93rem;font-weight:600;color:var(--ink2);margin-bottom:.45rem}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:.4rem}
+.seg button{min-height:3.6rem;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--paper);font-weight:700;font-size:1rem;line-height:1.1;padding:.3rem}
+.seg button small{display:block;font-weight:400;font-size:.72rem;color:var(--ink2);margin-top:.2rem}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button[aria-pressed="true"] small{color:#C7D2DC}
+.note{margin-top:.5rem;font-size:.84rem;background:var(--yellow-l);padding:.45rem .7rem;border-radius:var(--r-sm)}
+.loads{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem}
+.loadchip{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:4.3rem;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--paper);font-size:.74rem;line-height:1.15;padding:.2rem}
+.loadchip .emo{font-size:1.45rem;line-height:1.15}
+.loadchip b{display:block;font-size:.9rem}
+.loadchip[aria-pressed="true"]{background:var(--yellow);box-shadow:inset 0 0 0 2px var(--ink)}
+.rangeRow{display:grid;grid-template-columns:auto 1fr 4.3rem;align-items:center;gap:.6rem;margin-top:.35rem;font-size:.88rem}
+.rangeRow output{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3rem;background:transparent;touch-action:none}
+input[type=range]::-webkit-slider-runnable-track{height:.75rem;background:var(--paper);border:2px solid var(--ink);border-radius:999px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:2.5rem;height:2.5rem;margin-top:-1rem;border-radius:50%;background:var(--yellow);border:3px solid var(--ink)}
+input[type=range]::-moz-range-track{height:.75rem;background:var(--paper);border:2px solid var(--ink);border-radius:999px}
+input[type=range]::-moz-range-thumb{width:2.3rem;height:2.3rem;border-radius:50%;background:var(--yellow);border:3px solid var(--ink)}
+.stepper{display:grid;grid-template-columns:3.3rem 1fr 3.3rem;align-items:center;gap:.35rem}
+.stepper button{height:3.3rem;border:3px solid var(--ink);border-radius:var(--r-sm);background:var(--paper);font-size:1.6rem;font-weight:700;line-height:1;box-shadow:0 .2rem 0 var(--ink)}
+.stepper button:active{transform:translateY(.2rem);box-shadow:none}
+.stepper .val{text-align:center;font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.stepper .val small{display:block;font-size:.7rem;font-weight:500;color:var(--ink2);margin-top:.15rem}
+.val.w{color:var(--red)} .val.f{color:var(--blue)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.duo .stepper{grid-template-columns:2.7rem 1fr 2.7rem;gap:.25rem}
+.duo .stepper button{height:3.2rem;font-size:1.4rem}
+.duo .stepper .val{font-size:1.05rem}
+.force{background:var(--blue-l);border-radius:var(--r-md);padding:.8rem;display:flex;flex-direction:column;gap:.35rem}
+.force h3{margin:0}
+.fval{font-size:2rem;font-weight:700;color:var(--blue);font-variant-numeric:tabular-nums;line-height:1.1}
+.btnrow{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem}
+.btnrow.two{grid-template-columns:1fr 1fr}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.ro{background:var(--paper2);border-radius:var(--r-sm);padding:.45rem .65rem}
+.ro span{display:block;font-size:.74rem;color:var(--ink2)}
+.ro b{font-size:1.12rem;font-variant-numeric:tabular-nums}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:3.5rem;padding:.45rem .8rem;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--paper);width:100%;text-align:left;font-weight:600}
+.switch small{display:block;font-weight:400;font-size:.74rem;color:var(--ink2)}
+.switch i{flex:none;width:3.6rem;height:2rem;border-radius:999px;background:var(--hole);position:relative;transition:background .15s}
+.switch i::after{content:"";position:absolute;top:.15rem;left:.2rem;width:1.7rem;height:1.7rem;border-radius:50%;background:#fff;border:2px solid var(--ink);box-sizing:border-box;transition:left .15s}
+.switch[aria-pressed="true"] i{background:var(--green)}
+.switch[aria-pressed="true"] i::after{left:1.7rem}
+.cmp{display:flex;flex-direction:column;gap:.45rem}
+.cmp>div{display:grid;grid-template-columns:7.2rem 1fr 4.8rem;align-items:center;gap:.5rem;font-size:.84rem}
+.cmp i{display:block;height:1.1rem;border-radius:999px;background:var(--blue);min-width:4px}
+.cmp i.r{background:var(--red)}
+.cmp b{text-align:right;font-variant-numeric:tabular-nums}
+
+/* mode tebak */
+body.tebak .ans{filter:blur(.42em);cursor:pointer;transition:filter .2s}
+body.tebak .ans.peek{filter:none}
+
+/* svg bits */
+.handle{cursor:grab}
+svg.dragging .handle{cursor:grabbing}
+.pulse{animation:pulse 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{50%{transform:scale(1.2);opacity:.5}}
+
+/* ===== nav ===== */
+.nav{display:grid;grid-template-columns:repeat(4,1fr) .18rem repeat(2,1fr);gap:.6rem;padding:.5rem 1.2rem .85rem}
+.nav .div{background:var(--hole);border-radius:2px;margin:.5rem 0}
+.nav button{display:flex;align-items:center;justify-content:center;gap:.6rem;min-height:4.1rem;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--paper);font-weight:700;font-size:1.08rem;box-shadow:0 .25rem 0 var(--ink);line-height:1.1}
+.nav button svg{width:2rem;height:2rem;flex:none}
+.nav button[aria-current="page"]{background:var(--yellow)}
+.nav button:active{transform:translateY(.25rem);box-shadow:none}
+
+.toast{position:fixed;left:50%;bottom:6.4rem;transform:translate(-50%,1rem);background:var(--ink);color:#fff;padding:.8rem 1.4rem;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== tabel ===== */
+.sheet,.quiz{grid-template-rows:auto minmax(0,1fr);gap:.8rem;padding:.25rem 1.2rem .6rem}
+.sheethead{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.sheethead h2{font-family:var(--display);font-size:2.1rem;font-weight:800;line-height:1}
+.sheethead p{color:var(--ink2);font-size:.95rem;margin-right:auto;max-width:40ch}
+.sheethead input{min-height:3.1rem;border:2px solid var(--ink);border-radius:var(--r-md);padding:0 .9rem;width:15rem;background:var(--paper)}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;overflow:auto;min-height:0;align-content:start;touch-action:pan-y;padding-bottom:.5rem}
+.tcard{background:var(--paper);border:3px solid var(--ink);border-radius:var(--r-lg);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.65rem;min-width:0}
+.tcard header{display:flex;align-items:center;gap:.6rem}
+.tcard h3{font-family:var(--display);font-size:1.45rem;font-weight:800;margin-right:auto}
+.tcard .k{color:var(--ink2)}
+.twrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;font-variant-numeric:tabular-nums}
+th{font-weight:600;text-align:left;padding:.45rem .5rem;border-bottom:3px solid var(--ink);white-space:nowrap}
+td{padding:.3rem .5rem;border-bottom:1px solid var(--hole);white-space:nowrap}
+td.del{text-align:right}
+td.del button{width:2.5rem;height:2.5rem;border:2px solid var(--ink);border-radius:50%;background:var(--paper);font-weight:700;font-size:1.1rem}
+.bar{position:relative;width:6.5rem;height:1rem;background:var(--paper2);border-radius:999px;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--blue);border-radius:999px}
+.bar::after{content:"";position:absolute;left:calc(50% - 1.5px);top:0;bottom:0;width:3px;background:var(--red)}
+.legend{font-size:.8rem;color:var(--ink2)}
+.empty{padding:.9rem 1rem;border:2px dashed var(--hole);border-radius:var(--r-md);color:var(--ink2);font-size:.95rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+details.think{border-radius:var(--r-sm);background:var(--paper2)}
+details.think summary{list-style:none;cursor:pointer;padding:.55rem .8rem;font-weight:600;min-height:3rem;display:flex;align-items:center;gap:.7rem;font-size:.95rem}
+details.think summary::-webkit-details-marker{display:none}
+details.think summary::before{content:"?";flex:none;width:1.9rem;height:1.9rem;border-radius:50%;background:var(--yellow);border:2px solid var(--ink);display:grid;place-items:center;font-weight:800}
+details.think[open] summary::before{content:"!";background:var(--green);color:#fff}
+details.think p{padding:0 .9rem .8rem 3.4rem;color:var(--ink2);font-size:.95rem}
+
+/* ===== kuis ===== */
+.qarea{min-height:0;overflow:auto;touch-action:pan-y;padding-bottom:.5rem}
+.qcard{max-width:66rem;margin:0 auto;background:var(--paper);border:3px solid var(--ink);border-radius:var(--r-lg);padding:1.3rem 1.6rem;display:flex;flex-direction:column;gap:1rem}
+.qcard.wide{max-width:none}
+.qmeta{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;font-size:.9rem}
+.pill{padding:.25rem .75rem;border-radius:999px;background:var(--paper2);font-weight:600}
+.qmeta .score{margin-left:auto;font-weight:700;font-size:1.05rem}
+.progress{display:flex;gap:.3rem}
+.progress i{flex:1;height:.55rem;border-radius:999px;background:var(--paper2)}
+.progress i.ok{background:var(--green)} .progress i.no{background:var(--red)} .progress i.now{background:var(--ink)}
+.qtext{font-family:var(--display);font-weight:600;font-size:1.6rem;line-height:1.28;max-width:56ch}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.opt{display:flex;align-items:center;gap:.8rem;text-align:left;min-height:4.6rem;padding:.6rem 1rem;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--paper);font-size:1.08rem;box-shadow:0 .25rem 0 var(--ink);line-height:1.3}
+.opt b{flex:none;width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;background:var(--paper2);border:2px solid var(--ink)}
+.opt:active{transform:translateY(.25rem);box-shadow:none}
+.opt:disabled{cursor:default;box-shadow:none;transform:translateY(.25rem)}
+.opt:disabled:not(.right):not(.wrong){opacity:.5}
+.opt.right{background:var(--green-l);border-color:var(--green)} .opt.right b{background:var(--green);color:#fff;border-color:var(--green)}
+.opt.wrong{background:var(--red-l);border-color:var(--red)} .opt.wrong b{background:var(--red);color:#fff;border-color:var(--red)}
+.explain{border-radius:var(--r-md);padding:1rem 1.1rem;background:var(--paper2);font-size:1.05rem;display:flex;gap:1rem;align-items:center}
+.explain.ok{background:var(--green-l)} .explain.no{background:var(--red-l)}
+.explain p{flex:1}
+.explain strong{display:block;font-family:var(--display);font-size:1.3rem}
+.result{text-align:center;align-items:center}
+.result .num{font-family:var(--display);font-size:6rem;font-weight:800;line-height:1}
+.review{text-align:left;display:flex;flex-direction:column;gap:.6rem;width:100%}
+.review div{background:var(--paper2);border-radius:var(--r-md);padding:.8rem 1rem}
+.tokens{display:flex;flex-wrap:wrap;gap:.55rem;min-height:3.4rem}
+.token{min-height:3.3rem;padding:0 1.1rem;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--paper);font-weight:600;font-size:1rem;box-shadow:0 .2rem 0 var(--ink)}
+.token[aria-pressed="true"]{background:var(--yellow);transform:translateY(-.15rem);box-shadow:0 .4rem 0 var(--ink)}
+.token.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-.45rem)}40%,80%{transform:translateX(.45rem)}}
+.sorthint{min-height:1.6rem;font-size:1rem;color:var(--ink2)}
+.sorthint.no{color:var(--red);font-weight:600} .sorthint.ok{color:var(--green);font-weight:600}
+.bins{display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem}
+.bin{min-height:11rem;border:3px dashed var(--ink2);border-radius:var(--r-md);background:var(--paper2);padding:.7rem;display:flex;flex-direction:column;gap:.35rem;text-align:left;align-items:flex-start;justify-content:flex-start}
+.bin strong{font-family:var(--display);font-size:1.15rem;line-height:1.1}
+.bin small{color:var(--ink2);font-size:.74rem;margin-bottom:.2rem}
+.bin .got{font-size:.78rem;background:var(--green-l);border-radius:.4rem;padding:.12rem .45rem}
+.bins.armed .bin{border-style:solid;border-color:var(--ink);background:var(--yellow-l)}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(27,43,58,.55);display:none;place-items:center;z-index:60;padding:1rem}
+.modal.show{display:grid}
+.modal .box{background:var(--paper);border:3px solid var(--ink);border-radius:var(--r-lg);max-width:46rem;padding:1.5rem 1.7rem;display:flex;flex-direction:column;gap:.9rem}
+.modal h2{font-family:var(--display);font-size:1.9rem;font-weight:800}
+.modal ol{padding-left:1.4rem;display:flex;flex-direction:column;gap:.45rem;font-size:1.02rem}
+.modal .small{font-size:.9rem;color:var(--ink2)}
+
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  html{font-size:15px}
+  body{height:auto;overflow:auto}
+  .app{height:auto;min-height:100vh}
+  .view.active{height:auto}
+  .lab{grid-template-columns:1fr}
+  .stage{min-height:55vh;flex:none}
+  .mission{flex-direction:column;align-items:flex-start;gap:.3rem}
+  .tgrid{grid-template-columns:1fr}
+  .bins{grid-template-columns:repeat(3,1fr)}
+  .opts{grid-template-columns:1fr}
+  .nav{position:sticky;bottom:0;background:var(--wall);grid-template-columns:repeat(3,1fr)}
+  .nav .div{display:none}
+  .top{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="hz" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="22" height="22" fill="#FFC21A"/><rect width="11" height="22" fill="#1B2B3A"/></pattern>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#E4EAEF" stroke-width="2"/></pattern>
+    <pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="16" height="16" fill="#E6EBEF"/><rect width="3" height="16" fill="#B8C4CE"/></pattern>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 56 56" aria-hidden="true"><rect x="1" y="1" width="54" height="54" rx="14" fill="#1B2B3A"/><polygon points="28,29 17,47 39,47" fill="url(#hz)" stroke="#FFC21A" stroke-width="2" stroke-linejoin="round"/><g transform="rotate(12 28 27)"><rect x="6" y="24" width="44" height="6" rx="3" fill="#C98B4F"/><rect x="8" y="13" width="12" height="11" rx="2" fill="#FBFCFD"/></g></svg>
+      <div><h1>Lab Pesawat Sederhana</h1><small>IPA Kelas 8 SMP</small></div>
+    </div>
+    <button class="btn" id="btn-tebak" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      Mode tebak
+    </button>
+    <button class="btn" id="btn-help">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.2 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><circle cx="12" cy="18" r=".6" fill="currentColor"/></svg>
+      Cara pakai
+    </button>
+    <button class="btn" id="btn-fs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      Layar penuh
+    </button>
+    <button class="btn" id="btn-pop" title="Buka lab di tab baru">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+      Tab baru
+    </button>
+  </header>
+
+  <main>
+    <!-- ================= TUAS ================= -->
+    <section class="view lab active" data-view="tuas">
+      <div class="stagecol">
+        <div class="mission"><h2>Tuas</h2><p id="tuas-mission"></p></div>
+        <div class="stage">
+          <svg id="tuas-svg" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Simulasi tuas"></svg>
+          <div class="hint">Geser lingkaran kuning di papan</div>
+          <div class="status" id="tuas-status"></div>
+          <div class="bubble" id="tuas-bubble"><b></b><span></span><button aria-label="Tutup">×</button></div>
+        </div>
+        <div class="formula" id="tuas-formula"></div>
+        <div class="examples" id="tuas-ex"></div>
+      </div>
+      <aside class="panel" aria-label="Kontrol tuas">
+        <div class="pbody">
+          <div class="ctl"><h3>Jenis tuas</h3>
+            <div class="seg" id="tuas-jenis">
+              <button data-j="1">Jenis 1<small>tumpu di tengah</small></button>
+              <button data-j="2">Jenis 2<small>beban di tengah</small></button>
+              <button data-j="3">Jenis 3<small>kuasa di tengah</small></button>
+            </div>
+            <p class="note">Trik ingat: lihat siapa yang di tengah. Tumpu, Beban, Kuasa = jenis 1, 2, 3.</p>
+          </div>
+          <div class="ctl force"><h3>Gaya kuasa dari kamu</h3>
+            <div class="fval" id="tuas-fval">0 N</div>
+            <input type="range" id="tuas-F" min="0" max="3000" step="1" aria-label="Gaya kuasa">
+            <div class="btnrow">
+              <button class="btn sm" data-df="-10">−10</button><button class="btn sm" data-df="-1">−1</button>
+              <button class="btn sm" data-df="1">+1</button><button class="btn sm" data-df="10">+10</button>
+            </div>
+            <button class="btn sm ghost wide" id="tuas-auto">Pas-in biar seimbang</button>
+          </div>
+          <div class="ctl"><h3>Panjang lengan</h3>
+            <div class="duo">
+              <div class="stepper"><button data-arm="lb" data-d="-5" aria-label="Kurangi lengan beban">−</button><div class="val w" id="tuas-lb"></div><button data-arm="lb" data-d="5" aria-label="Tambah lengan beban">+</button></div>
+              <div class="stepper"><button data-arm="lk" data-d="-5" aria-label="Kurangi lengan kuasa">−</button><div class="val f" id="tuas-lk"></div><button data-arm="lk" data-d="5" aria-label="Tambah lengan kuasa">+</button></div>
+            </div>
+          </div>
+          <div data-loadpicker="tuas"></div>
+        </div>
+        <div class="pfoot"><button class="btn primary" data-record="tuas">Catat ke tabel</button><button class="btn" data-reset="tuas">Reset</button></div>
+      </aside>
+    </section>
+
+    <!-- ================= KATROL ================= -->
+    <section class="view lab" data-view="katrol">
+      <div class="stagecol">
+        <div class="mission"><h2>Katrol</h2><p id="katrol-mission"></p></div>
+        <div class="stage">
+          <svg id="katrol-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Simulasi katrol"></svg>
+          <div class="hint" id="katrol-hint">Tarik lingkaran kuning di neraca pegas</div>
+          <div class="status" id="katrol-status"></div>
+          <div class="bubble" id="katrol-bubble"><b></b><span></span><button aria-label="Tutup">×</button></div>
+        </div>
+        <div class="formula" id="katrol-formula"></div>
+        <div class="examples" id="katrol-ex"></div>
+      </div>
+      <aside class="panel" aria-label="Kontrol katrol">
+        <div class="pbody">
+          <div class="ctl"><h3>Jenis katrol</h3>
+            <div class="seg" id="katrol-type">
+              <button data-t="tetap">Tetap<small>diam di atas</small></button>
+              <button data-t="bebas">Bebas<small>ikut naik</small></button>
+              <button data-t="majemuk">Majemuk<small>gabungan (takal)</small></button>
+            </div>
+          </div>
+          <div class="ctl" id="katrol-nwrap"><h3>Jumlah tali penopang katrol bawah</h3>
+            <div class="stepper"><button data-kn="-1" aria-label="Kurangi tali">−</button><div class="val" id="katrol-n"></div><button data-kn="1" aria-label="Tambah tali">+</button></div>
+          </div>
+          <div class="ctl"><h3>Tarik tali</h3>
+            <div class="btnrow two"><button class="btn primary" id="katrol-pull"></button><button class="btn" id="katrol-rel"></button></div>
+          </div>
+          <div class="readouts" id="katrol-ro"></div>
+          <div data-loadpicker="katrol"></div>
+        </div>
+        <div class="pfoot"><button class="btn primary" data-record="katrol">Catat ke tabel</button><button class="btn" data-reset="katrol">Reset</button></div>
+      </aside>
+    </section>
+
+    <!-- ================= BIDANG MIRING ================= -->
+    <section class="view lab" data-view="bm">
+      <div class="stagecol">
+        <div class="mission"><h2>Bidang miring</h2><p>Mau naikin barang ke bak truk tanpa diangkat langsung? Pakai papan! Coba bikin papannya makin panjang. Dorongnya jadi makin ringan nggak?</p></div>
+        <div class="stage">
+          <svg id="bm-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Simulasi bidang miring"></svg>
+          <div class="hint">Geser kotak, ujung bawah papan, atau puncak papan</div>
+          <div class="status" id="bm-status"></div>
+          <div class="bubble" id="bm-bubble"><b></b><span></span><button aria-label="Tutup">×</button></div>
+        </div>
+        <div class="formula" id="bm-formula"></div>
+        <div class="examples" id="bm-ex"></div>
+      </div>
+      <aside class="panel" aria-label="Kontrol bidang miring">
+        <div class="pbody">
+          <div class="ctl"><h3>Ukuran papan</h3>
+            <div class="duo">
+              <div class="stepper"><button data-bm="h" data-d="-0.1" aria-label="Kurangi tinggi">−</button><div class="val w" id="bm-h"></div><button data-bm="h" data-d="0.1" aria-label="Tambah tinggi">+</button></div>
+              <div class="stepper"><button data-bm="s" data-d="-0.1" aria-label="Kurangi panjang">−</button><div class="val f" id="bm-s"></div><button data-bm="s" data-d="0.1" aria-label="Tambah panjang">+</button></div>
+            </div>
+          </div>
+          <button class="switch" id="bm-fric" aria-pressed="false"><span>Nyalakan gesekan<small>kayak papan kayu kasar di dunia nyata</small></span><i></i></button>
+          <div class="ctl"><h3>Gerakkan kotak</h3>
+            <div class="btnrow two"><button class="btn primary" id="bm-push">Dorong naik</button><button class="btn" id="bm-back">Turunkan</button></div>
+          </div>
+          <div class="ctl"><h3>Bandingkan gayanya</h3><div class="cmp" id="bm-cmp"></div></div>
+          <div class="readouts" id="bm-ro"></div>
+          <div data-loadpicker="bm"></div>
+        </div>
+        <div class="pfoot"><button class="btn primary" data-record="bm">Catat ke tabel</button><button class="btn" data-reset="bm">Reset</button></div>
+      </aside>
+    </section>
+
+    <!-- ================= RODA & POROS ================= -->
+    <section class="view lab" data-view="rp">
+      <div class="stagecol">
+        <div class="mission"><h2>Roda dan poros</h2><p>Roda besar, poros kecil, keduanya berputar bareng. Putar pegangan kuning dan lihat seberapa kecil gaya yang kamu perlukan buat mengangkat beban.</p></div>
+        <div class="stage">
+          <svg id="rp-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Simulasi roda dan poros"></svg>
+          <div class="hint">Putar lingkaran kuning di pinggir roda</div>
+          <div class="status" id="rp-status"></div>
+          <div class="bubble" id="rp-bubble"><b></b><span></span><button aria-label="Tutup">×</button></div>
+        </div>
+        <div class="formula" id="rp-formula"></div>
+        <div class="examples" id="rp-ex"></div>
+      </div>
+      <aside class="panel" aria-label="Kontrol roda dan poros">
+        <div class="pbody">
+          <div class="ctl"><h3>Ukuran roda dan poros</h3>
+            <div class="duo">
+              <div class="stepper"><button data-rp="R" data-d="-2" aria-label="Kecilkan roda">−</button><div class="val f" id="rp-R"></div><button data-rp="R" data-d="2" aria-label="Besarkan roda">+</button></div>
+              <div class="stepper"><button data-rp="r" data-d="-1" aria-label="Kecilkan poros">−</button><div class="val w" id="rp-r"></div><button data-rp="r" data-d="1" aria-label="Besarkan poros">+</button></div>
+            </div>
+          </div>
+          <div class="ctl"><h3>Putar engkol</h3>
+            <div class="btnrow two"><button class="btn primary" id="rp-turn">↻ Putar</button><button class="btn" id="rp-back">↺ Balik</button></div>
+          </div>
+          <div class="readouts" id="rp-ro"></div>
+          <div data-loadpicker="rp"></div>
+        </div>
+        <div class="pfoot"><button class="btn primary" data-record="rp">Catat ke tabel</button><button class="btn" data-reset="rp">Reset</button></div>
+      </aside>
+    </section>
+
+    <!-- ================= TABEL ================= -->
+    <section class="view sheet" data-view="tabel">
+      <div class="sheethead">
+        <h2>Tabel pengamatan</h2>
+        <p>Data dari tombol “Catat ke tabel” muncul di sini. Pola apa yang kamu temukan?</p>
+        <input type="text" id="kelompok" placeholder="Nama kelompok / kelas" aria-label="Nama kelompok">
+        <button class="btn" id="btn-copy">Salin tabel</button>
+        <button class="btn primary" id="btn-csv">Unduh CSV</button>
+      </div>
+      <div class="tgrid" id="tgrid"></div>
+    </section>
+
+    <!-- ================= KUIS ================= -->
+    <section class="view quiz" data-view="kuis">
+      <div class="sheethead">
+        <h2>Uji pemahaman</h2>
+        <p>Pilih mode dulu, ya.</p>
+        <div class="seg" id="quiz-mode" style="min-width:26rem">
+          <button data-m="pg" aria-pressed="true">Kuis pilihan ganda<small>10 soal HOTS acak</small></button>
+          <button data-m="sort" aria-pressed="false">Game sortir alat<small>kelompokkan alat sehari-hari</small></button>
+        </div>
+      </div>
+      <div class="qarea" id="qarea"></div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Pilih lab">
+    <button data-go="tuas" aria-current="page"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M3 12l26-5"/><path d="M16 10l-5 16h10z" fill="#FFC21A"/><rect x="4" y="3" width="6" height="6" rx="1"/></svg>Tuas</button>
+    <button data-go="katrol"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 3h24"/><path d="M16 3v5"/><circle cx="16" cy="13" r="5" fill="#FFC21A"/><path d="M11 13v10M21 13v14"/><rect x="7" y="23" width="8" height="6" rx="1"/></svg>Katrol</button>
+    <button data-go="bm"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M3 27h26V9z" fill="#FFC21A"/><rect x="9" y="15" width="6" height="6" transform="rotate(-33 12 18)"/></svg>Bidang miring</button>
+    <button data-go="rp"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="16" cy="14" r="11"/><circle cx="16" cy="14" r="3.5" fill="#FFC21A"/><path d="M12.5 14v13"/><circle cx="16" cy="3" r="2" fill="currentColor"/></svg>Roda &amp; poros</button>
+    <span class="div" aria-hidden="true"></span>
+    <button data-go="tabel"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6"><rect x="4" y="5" width="24" height="22" rx="3"/><path d="M4 12h24M4 19h24M13 5v22"/></svg>Tabel</button>
+    <button data-go="kuis"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 6h22v16H14l-6 5v-5H5z" fill="#FFC21A" stroke-linejoin="round"/><path d="M13 11a3 3 0 1 1 4 2.8c-1 .4-1 1-1 2"/><circle cx="16" cy="18.6" r=".5" fill="currentColor"/></svg>Kuis</button>
+  </nav>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal" id="help" role="dialog" aria-modal="true" aria-labelledby="help-title">
+  <div class="box">
+    <h2 id="help-title">Cara pakai lab ini</h2>
+    <ol>
+      <li>Pilih lab di tombol bawah: Tuas, Katrol, Bidang miring, atau Roda &amp; poros.</li>
+      <li>Geser lingkaran kuning langsung di layar, atau pakai tombol di panel kanan.</li>
+      <li>Nyalakan <b>Mode tebak</b> supaya siswa menebak dulu. Angka hasil jadi buram, ketuk angkanya untuk membuka.</li>
+      <li>Setiap selesai satu percobaan, tekan <b>Catat ke tabel</b>.</li>
+      <li>Buka <b>Tabel</b> untuk diskusi pola data, lalu tutup pelajaran dengan <b>Kuis</b>.</li>
+    </ol>
+    <p class="small">Semua hitungan memakai g = 10 N/kg dan menganggap alat ideal (tanpa gesekan), kecuali gesekan dinyalakan di lab bidang miring. Data tabel hilang kalau halaman di-refresh, jadi salin atau unduh dulu, ya.</p>
+    <button class="btn primary" id="help-close">Siap, mulai!</button>
+  </div>
+</div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const C={ink:'#1B2B3A',ink2:'#4B5C6C',paper:'#FBFCFD',paper2:'#EEF2F5',yellow:'#FFC21A',blue:'#1C6FD6',red:'#D93A2B',green:'#1F9254',wood:'#C98B4F',woodD:'#8E5A2B',steel:'#AEBBC6',steelD:'#6B7A87',rope:'#C9A064'};
+const G=10;
+const FONT='Lexend, system-ui, Segoe UI, sans-serif';
+const LOADS=[
+  {emo:'🍉',name:'Semangka',kg:5},{emo:'📦',name:'Kardus buku',kg:12},{emo:'💧',name:'Galon air',kg:19},
+  {emo:'🧱',name:'Tumpukan bata',kg:30},{emo:'🛢️',name:'Drum air',kg:60},{emo:'⚓',name:'Jangkar',kg:100}
+];
+const loadInfo=kg=>LOADS.find(l=>l.kg===kg)||{emo:'🎁',name:'Beban',kg};
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const snap=(v,st)=>Math.round(v/st)*st;
+const r1=v=>Math.round(v*10)/10;
+const fmt=(n,d=1)=>Number.isFinite(n)?(Math.round(n*10**d)/10**d).toLocaleString('id-ID',{maximumFractionDigits:d}):'∞';
+const reduceMotion=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const EMBEDDED=(()=>{try{return window.self!==window.top;}catch(_){return true;}})();
+if(EMBEDDED)document.body.classList.add('embedded');
+
+/* ---------- mode tebak ---------- */
+const peeks=new Set();
+const ansAttr=(k,extra='')=>`class="ans ${extra}${peeks.has(k)?' peek':''}" data-k="${k}"`;
+document.addEventListener('click',e=>{
+  const a=e.target.closest('.ans'); if(!a||!document.body.classList.contains('tebak'))return;
+  const k=a.dataset.k; peeks.has(k)?peeks.delete(k):peeks.add(k);
+  $$(`.ans[data-k="${k}"]`).forEach(el=>el.classList.toggle('peek',peeks.has(k)));
+});
+
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+
+/* ---------- svg helpers ---------- */
+const BG=h=>`<rect x="-1500" y="-1500" width="4000" height="${h+3000}" fill="url(#grid)"/>`;
+function arrow(x1,y1,x2,y2,col,w=8){
+  const a=Math.atan2(y2-y1,x2-x1),hl=24,hw=15,bx=x2-hl*Math.cos(a),by=y2-hl*Math.sin(a),px=-Math.sin(a)*hw,py=Math.cos(a)*hw;
+  return `<line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/><polygon points="${x2},${y2} ${bx+px},${by+py} ${bx-px},${by-py}" fill="${col}" stroke="${col}" stroke-width="3" stroke-linejoin="round"/>`;
+}
+function tag(x,y,text,bg,fg='#fff',size=21,attrs=''){
+  const w=text.length*size*0.56+24,h=size+14;
+  return `<g ${attrs}><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="${bg}"/><text x="${x}" y="${y+size*0.36}" text-anchor="middle" font-size="${size}" font-weight="700" fill="${fg}" font-family="${FONT}">${text}</text></g>`;
+}
+function loadBox(cx,bottom,kg,w=112,h=88){
+  const L=loadInfo(kg);
+  return `<g><rect x="${cx-w/2}" y="${bottom-h}" width="${w}" height="${h}" rx="12" fill="#fff" stroke="${C.ink}" stroke-width="4"/><text x="${cx}" y="${bottom-h*0.46}" text-anchor="middle" font-size="${h*0.42}">${L.emo}</text><text x="${cx}" y="${bottom-11}" text-anchor="middle" font-size="19" font-weight="700" fill="${C.ink}" font-family="${FONT}">${kg} kg</text></g>`;
+}
+function handle(x,y,key,pulse,r=38){
+  return `<g class="handle" data-drag="${key}"><circle cx="${x}" cy="${y}" r="${r}" fill="${C.yellow}" fill-opacity=".3" stroke="${C.yellow}" stroke-width="5"${pulse?' class="pulse"':''}/><circle cx="${x}" cy="${y}" r="${r*0.34}" fill="${C.yellow}" stroke="${C.ink}" stroke-width="3"/></g>`;
+}
+function vdim(x,y1,y2,col,label,attrs=''){
+  return `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${col}" stroke-width="4"/><line x1="${x-12}" y1="${y1}" x2="${x+12}" y2="${y1}" stroke="${col}" stroke-width="4"/><line x1="${x-12}" y1="${y2}" x2="${x+12}" y2="${y2}" stroke="${col}" stroke-width="4"/>`+tag(x,(y1+y2)/2,label,col,'#fff',19,attrs);
+}
+function svgPoint(svg,e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse());}
+function enableDrag(svg,onMove){
+  let key=null,pid=null;
+  svg.addEventListener('pointerdown',e=>{
+    const h=e.target.closest('[data-drag]'); if(!h||key!==null)return;
+    key=h.dataset.drag; pid=e.pointerId; try{svg.setPointerCapture(pid);}catch(_){}
+    e.preventDefault(); svg.classList.add('dragging'); onMove(key,svgPoint(svg,e),true);
+  });
+  svg.addEventListener('pointermove',e=>{if(key===null||e.pointerId!==pid)return;e.preventDefault();onMove(key,svgPoint(svg,e),false);});
+  const end=e=>{if(e.pointerId!==pid)return;key=null;pid=null;svg.classList.remove('dragging');};
+  svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+}
+function holdable(btn,fn){
+  let t1,t2;const stop=()=>{clearTimeout(t1);clearInterval(t2);};
+  btn.addEventListener('pointerdown',e=>{e.preventDefault();stop();fn();t1=setTimeout(()=>{t2=setInterval(fn,70);},380);});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,stop));
+  btn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fn();}});
+}
+function mountLoadPicker(mod,st,onChange){
+  const host=document.querySelector(`[data-loadpicker="${mod}"]`);
+  host.className='ctl';
+  host.innerHTML=`<h3>Pilih beban</h3><div class="loads">${LOADS.map(l=>`<button class="loadchip" data-kg="${l.kg}"><span class="emo">${l.emo}</span>${l.name}<b>${l.kg} kg</b></button>`).join('')}</div><label class="rangeRow"><span>Atur sendiri</span><input type="range" min="1" max="120" step="1" aria-label="Massa beban"><output></output></label>`;
+  const rng=host.querySelector('input'),out=host.querySelector('output');
+  const sync=()=>{rng.value=st.kg;out.textContent=`${st.kg} kg`;host.querySelectorAll('.loadchip').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.kg===st.kg)));};
+  host.querySelector('.loads').addEventListener('click',e=>{const b=e.target.closest('.loadchip');if(!b)return;st.kg=+b.dataset.kg;sync();onChange();});
+  rng.addEventListener('input',()=>{st.kg=+rng.value;sync();onChange();});
+  sync();return sync;
+}
+const exLists={};
+function initExamples(mod){
+  const box=$(`#${mod}-ex`),bub=$(`#${mod}-bubble`);
+  box.addEventListener('click',ev=>{const b=ev.target.closest('.chip');if(!b)return;const e=exLists[mod][+b.dataset.i];bub.querySelector('b').textContent=e.name;bub.querySelector('span').textContent=e.text;bub.classList.add('show');});
+  bub.querySelector('button').addEventListener('click',()=>bub.classList.remove('show'));
+}
+function setExamples(mod,list){
+  exLists[mod]=list;
+  $(`#${mod}-ex`).innerHTML='<span>Di sekitar kamu:</span>'+list.map((e,i)=>`<button class="chip" data-i="${i}">${e.name}</button>`).join('');
+  $(`#${mod}-bubble`).classList.remove('show');
+}
+function setStatus(id,text,cls=''){const s=$(id);s.textContent=text;s.className='status '+cls;}
+const rows={tuas:[],katrol:[],bm:[],rp:[]};
+
+/* =====================================================
+   TUAS
+   ===================================================== */
+const TUAS_TXT={
+  1:{mission:'Urutannya Beban, Titik tumpu, Kuasa. Coba geser titik tumpu makin dekat ke beban. Gaya yang kamu butuhkan jadi makin ringan atau makin berat?',ex:[
+    {name:'✂️ Gunting',text:'Baut di tengah gunting itu titik tumpunya. Kertas yang dipotong jadi beban, jari kamu memberi kuasa.'},
+    {name:'Jungkat-jungkit',text:'Poros di tengah jadi titik tumpu. Teman yang lebih berat harus duduk lebih dekat ke tengah supaya seimbang.'},
+    {name:'Linggis',text:'Ujung linggis diselipkan di bawah batu (beban), ada ganjalan sebagai titik tumpu, lalu kamu menekan ujung satunya.'},
+    {name:'Tang',text:'Engsel tang di tengah jadi titik tumpu. Makin panjang gagangnya, makin enteng buat menjepit.'}]},
+  2:{mission:'Urutannya Titik tumpu, Beban, Kuasa. Mirip gerobak dorong! Geser bebannya mendekati titik tumpu, lalu perhatikan angka F di bawah.',ex:[
+    {name:'Gerobak dorong',text:'Roda di depan jadi titik tumpu, barang di bak jadi beban, tangan kamu mengangkat gagang (kuasa).'},
+    {name:'Pembuka tutup botol',text:'Ujung yang menempel di atas tutup jadi titik tumpu, pinggiran tutup yang dicungkil jadi beban, tangan kamu di ujung gagang.'},
+    {name:'Pemecah kemiri',text:'Engsel di ujung jadi titik tumpu, kemiri di tengah jadi beban, tangan menekan di ujung gagang.'},
+    {name:'Pemotong kertas',text:'Engsel pisau di ujung meja jadi titik tumpu, kertas di tengah, tangan menekan gagang di ujung satunya.'}]},
+  3:{mission:'Urutannya Titik tumpu, Kuasa, Beban, sama kayak lengan kamu. Kok gayanya malah lebih besar dari berat beban? Terus gunanya apa, ya?',ex:[
+    {name:'💪 Lengan bawah kamu',text:'Siku jadi titik tumpu, otot bisep menarik tulang lengan dekat siku (kuasa), benda di telapak tangan jadi beban. Ototnya kerja keras, tapi tangan bisa bergerak cepat dan jauh!'},
+    {name:'Pinset',text:'Ujung yang menyatu jadi titik tumpu, jari menekan di tengah, benda kecil dijepit di ujung.'},
+    {name:'Alat pancing',text:'Tangan di pangkal joran jadi titik tumpu, tangan satunya menarik di tengah, ikan di ujung tali jadi beban.'},
+    {name:'Sekop',text:'Tangan di ujung gagang jadi titik tumpu, tangan yang di tengah memberi kuasa, tanah di sekop jadi beban.'}]}
+};
+const TUAS_DEF={1:{B:10,T:70,K:190},2:{T:0,B:60,K:190},3:{T:0,K:60,B:190}};
+const tuas={jenis:1,kg:19,pos:JSON.parse(JSON.stringify(TUAS_DEF)),F:0,theta:-12,touched:false};
+const TU={x0:170,py:300,s:3.3,ground:470,max:12};
+let tuasSync;
+function tuasCalc(){const p=tuas.pos[tuas.jenis],w=tuas.kg*G,lb=Math.abs(p.B-p.T),lk=Math.abs(p.K-p.T);return{p,w,lb,lk,Fn:w*lb/lk,KM:lk/lb};}
+function tuasState(){const{Fn}=tuasCalc(),F=tuas.F;if(F<=0)return -1;if(Math.abs(F-Fn)<=Math.max(Fn*0.02,0.5))return 0;return F>Fn?1:-1;}
+function tuasTarget(){return (tuas.jenis===1?1:-1)*tuasState()*TU.max;}
+function clampPos(j,p,key){
+  if(j===1){if(key==='T')p.T=clamp(p.T,p.B+10,p.K-10);if(key==='B')p.B=clamp(p.B,0,p.T-10);if(key==='K')p.K=clamp(p.K,p.T+10,200);}
+  else if(j===2){p.T=0;if(key==='B')p.B=clamp(p.B,10,p.K-20);if(key==='K')p.K=clamp(p.K,p.B+20,200);}
+  else{p.T=0;if(key==='K')p.K=clamp(p.K,10,p.B-20);if(key==='B')p.B=clamp(p.B,p.K+20,200);}
+}
+function renderTuas(){
+  const{p,w,lb,lk}=tuasCalc(),j=tuas.jenis,{x0,py,s,ground}=TU;
+  const px=x0+p.T*s,th=tuas.theta*Math.PI/180,co=Math.cos(th),si=Math.sin(th);
+  const W=(pos,off=0)=>{const d=(pos-p.T)*s;return[px+d*co+off*si,py+d*si-off*co];};
+  const lenOf=v=>30+120*Math.min(v/(2*w),1);
+  let o=BG(620);
+  o+=`<rect x="-1500" y="${ground}" width="4000" height="2000" fill="url(#hatch)"/><line x1="-1500" y1="${ground}" x2="2500" y2="${ground}" stroke="${C.ink}" stroke-width="4"/>`;
+  if(j===1)o+=`<polygon points="${px},${py+11} ${px-62},${ground} ${px+62},${ground}" fill="url(#hz)" stroke="${C.ink}" stroke-width="5" stroke-linejoin="round"/>`;
+  else o+=`<rect x="${px-15}" y="${py}" width="30" height="${ground-py}" fill="${C.steel}" stroke="${C.ink}" stroke-width="4"/><rect x="${px-44}" y="${ground-16}" width="88" height="16" rx="3" fill="${C.steelD}" stroke="${C.ink}" stroke-width="3"/>`;
+  o+=tag(px,ground+42,'Titik tumpu',C.ink,'#fff',18);
+  // papan (ikut miring)
+  let g=`<rect x="${x0}" y="${py-11}" width="${200*s}" height="22" rx="7" fill="${C.wood}" stroke="${C.woodD}" stroke-width="4"/>`;
+  for(let c=10;c<200;c+=10)g+=`<line x1="${x0+c*s}" y1="${py-9}" x2="${x0+c*s}" y2="${py-(c%50?3:-3)}" stroke="${C.woodD}" stroke-width="2"/>`;
+  const dim=(a,b,y,col,label)=>{const xa=x0+a*s,xb=x0+b*s;return `<line x1="${xa}" y1="${y}" x2="${xb}" y2="${y}" stroke="${col}" stroke-width="4"/><line x1="${xa}" y1="${y-12}" x2="${xa}" y2="${y+12}" stroke="${col}" stroke-width="4"/><line x1="${xb}" y1="${y-12}" x2="${xb}" y2="${y+12}" stroke="${col}" stroke-width="4"/>`+tag((xa+xb)/2,y,label,col,'#fff',19);};
+  g+=dim(p.T,p.B,py+62,C.red,`lb = ${lb} cm`);
+  g+=dim(p.T,p.K,py+(j===1?62:108),C.blue,`lk = ${lk} cm`);
+  g+=`<circle cx="${x0+p.B*s}" cy="${py}" r="8" fill="${C.red}" stroke="#fff" stroke-width="3"/><circle cx="${x0+p.K*s}" cy="${py}" r="8" fill="${C.blue}" stroke="#fff" stroke-width="3"/>`;
+  if(j!==1)g+=`<circle cx="${px}" cy="${py}" r="16" fill="url(#hz)" stroke="${C.ink}" stroke-width="4"/>`;
+  o+=`<g transform="rotate(${tuas.theta.toFixed(2)} ${px} ${py})">${g}</g>`;
+  // beban
+  const[bx,by]=W(p.B,11);
+  o+=loadBox(bx,by,tuas.kg);
+  o+=arrow(bx,by,bx,by+lenOf(w),C.red);
+  o+=tag(bx,by-112,`w = ${fmt(w,0)} N`,C.red);
+  // kuasa
+  const F=tuas.F,lf=lenOf(F),[kx,ky]=W(p.K,11);
+  if(F>0){
+    if(j===1){o+=arrow(kx,ky-lf,kx,ky,C.blue);o+=tag(kx,ky-lf-26,`F = ${fmt(F,1)} N`,C.blue);}
+    else{o+=arrow(kx,ky,kx,ky-lf,C.blue);o+=tag(kx,ky-lf-26,`F = ${fmt(F,1)} N`,C.blue);}
+  }else o+=tag(kx,ky-60,'F = ?',C.paper2,C.blue);
+  // pegangan geser
+  const pul=!tuas.touched;
+  if(j===1)o+=handle(px,py+92,'T',pul,40);
+  const[hbx,hby]=W(p.B,0),[hkx,hky]=W(p.K,0);
+  o+=handle(hbx,hby,'B',pul)+handle(hkx,hky,'K',pul);
+  $('#tuas-svg').innerHTML=o;
+}
+function tuasUpdate(){
+  const{w,lb,lk,Fn,KM}=tuasCalc(),st=tuasState(),j=tuas.jenis;
+  $('#tuas-mission').textContent=TUAS_TXT[j].mission;
+  $$('#tuas-jenis button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.j===j)));
+  $('#tuas-lb').innerHTML=`${lb} cm<small>lengan beban</small>`;
+  $('#tuas-lk').innerHTML=`${lk} cm<small>lengan kuasa</small>`;
+  $('#tuas-fval').textContent=`${fmt(tuas.F,1)} N`;
+  $('#tuas-F').value=Math.min(tuas.F,3000);
+  if(Fn>3000)setStatus('#tuas-status',`Butuh ${fmt(Fn,0)} N, berat banget! Ubah posisinya`,'warn');
+  else if(tuas.F<=0)setStatus('#tuas-status','Beri gaya kuasa dulu, yuk 👉','warn');
+  else if(st<0)setStatus('#tuas-status','Belum kuat, tambah gayanya 💪','bad');
+  else if(st===0)setStatus('#tuas-status','Seimbang! ⚖️','ok');
+  else setStatus('#tuas-status','Beban terangkat! 🎉','ok');
+  $('#tuas-formula').innerHTML=
+    `<div class="eq"><span class="tok w">w</span>×<span class="tok w">lb</span>=<span class="tok f">F</span>×<span class="tok f">lk</span></div>`+
+    `<div class="eq"><span class="tok w">${fmt(w,0)} N</span>×<span class="tok w">${lb} cm</span>=<span class="tok f">F</span>×<span class="tok f">${lk} cm</span><span class="big">→ F = <span ${ansAttr('tuasF')}>${fmt(Fn,1)} N</span></span></div>`+
+    `<div class="eq"><span class="k">Keuntungan mekanis</span><span class="big">KM = lk ÷ lb = <span ${ansAttr('tuasKM')}>${fmt(KM,2)}</span></span></div>`;
+  renderTuas();
+}
+function tuasTick(dt){
+  const target=tuasTarget(),d=target-tuas.theta;
+  if(Math.abs(d)<0.03){if(tuas.theta!==target){tuas.theta=target;renderTuas();}return;}
+  tuas.theta=reduceMotion?target:tuas.theta+d*Math.min(1,dt*7);
+  renderTuas();
+}
+function tuasSetJenis(j){tuas.jenis=j;tuas.theta=tuasTarget();setExamples('tuas',TUAS_TXT[j].ex);tuasUpdate();}
+function initTuas(){
+  initExamples('tuas');
+  tuasSync=mountLoadPicker('tuas',tuas,tuasUpdate);
+  $('#tuas-jenis').addEventListener('click',e=>{const b=e.target.closest('button');if(b)tuasSetJenis(+b.dataset.j);});
+  $('#tuas-F').addEventListener('input',e=>{tuas.F=+e.target.value;tuasUpdate();});
+  $$('[data-df]').forEach(b=>holdable(b,()=>{tuas.F=clamp(r1(tuas.F+ +b.dataset.df),0,3000);tuasUpdate();}));
+  $('#tuas-auto').addEventListener('click',()=>{tuas.F=tuasCalc().Fn;tuasUpdate();});
+  $$('[data-arm]').forEach(b=>holdable(b,()=>{
+    const j=tuas.jenis,p=tuas.pos[j],key=b.dataset.arm==='lb'?'B':'K',dir=(j===1&&key==='B')?-1:1;
+    p[key]=p.T+dir*(Math.abs(p[key]-p.T)+ +b.dataset.d);clampPos(j,p,key);tuas.touched=true;tuasUpdate();
+  }));
+  enableDrag($('#tuas-svg'),(key,pt)=>{
+    const j=tuas.jenis,p=tuas.pos[j],{s,x0,py}=TU;
+    if(key==='T')p.T=snap((pt.x-x0)/s,5);
+    else{const px=x0+p.T*s,th=tuas.theta*Math.PI/180;p[key]=snap(p.T+((pt.x-px)*Math.cos(th)+(pt.y-py)*Math.sin(th))/s,5);}
+    clampPos(j,p,key);tuas.touched=true;tuasUpdate();
+  });
+  tuasSetJenis(1);
+}
+function tuasReset(){tuas.pos=JSON.parse(JSON.stringify(TUAS_DEF));tuas.F=0;tuas.kg=19;tuasSync();tuas.theta=tuasTarget();tuasUpdate();}
+function tuasRecord(){const{w,lb,lk,Fn,KM}=tuasCalc();rows.tuas.push({j:tuas.jenis,w,lb,lk,F:Fn,KM});return rows.tuas.length;}
+
+/* =====================================================
+   KATROL
+   ===================================================== */
+const KTXT={
+  tetap:{mission:'Katrol tetap cuma “numpang lewat” buat tali. Tarik talinya, lalu cek neraca pegas: gayanya sama nggak dengan berat beban?',ex:[
+    {name:'Tiang bendera',text:'Di puncak tiang ada katrol tetap. Kamu menarik tali ke bawah, bendera naik ke atas. Gayanya tidak berkurang, tapi arahnya jadi lebih enak.'},
+    {name:'Timba sumur',text:'Katrol di atas sumur membuat kita bisa mengangkat ember dengan menarik tali ke bawah, bahkan sambil memanfaatkan berat badan.'},
+    {name:'Tirai jendela',text:'Tirai model tarik biasanya punya katrol kecil di atas. Tali ditarik ke bawah, tirai naik ke atas.'}]},
+  bebas:{mission:'Katrolnya ikut naik bareng beban. Bandingkan: kamu menarik tali berapa cm, bebannya naik berapa cm?',ex:[
+    {name:'Pengait crane',text:'Pengait di ujung crane menempel pada katrol yang ikut naik-turun bersama beban, jadi gaya tariknya lebih kecil.'},
+    {name:'Katrol di bengkel',text:'Montir mengangkat mesin mobil memakai rantai dan katrol yang ikut bergerak, sehingga tenaga yang dibutuhkan lebih kecil.'}]},
+  majemuk:{mission:'Hitung tali yang menopang katrol bawah (angka kuning). Tambah jumlah talinya, lalu lihat angka di neraca pegas!',ex:[
+    {name:'Crane pelabuhan',text:'Crane memakai takal dengan banyak tali penopang. Itu sebabnya crane bisa mengangkat kontainer yang beratnya berton-ton.'},
+    {name:'Lift barang',text:'Sistem katrol majemuk membantu motor lift mengangkat kabin yang berat dengan gaya lebih kecil.'},
+    {name:'Tim SAR',text:'Tim SAR memakai sistem katrol majemuk untuk menarik korban dari jurang hanya dengan tenaga beberapa orang.'}]}
+};
+const katrol={type:'tetap',n:4,kg:19,pull:0,touched:false};
+const KT={max:200,cm:0.5,cx:470};
+let katrolSync,kStart=null;
+const kKM=()=>katrol.type==='tetap'?1:katrol.type==='bebas'?2:katrol.n;
+function kCalc(){const KM=kKM(),w=katrol.kg*G,F=w/KM,sCm=katrol.pull*KT.cm,hCm=sCm/KM;return{KM,w,F,sCm,hCm};}
+const ropeSvg=d=>`<path d="${d}" fill="none" stroke="${C.ink}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${C.rope}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+const sheaveSvg=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${C.steel}" stroke="${C.ink}" stroke-width="4"/><circle cx="${x}" cy="${y}" r="${Math.max(r-10,6)}" fill="none" stroke="${C.steelD}" stroke-width="2"/><circle cx="${x}" cy="${y}" r="7" fill="${C.ink}"/>`;
+const numTag=(x,y,n)=>`<circle cx="${x}" cy="${y}" r="17" fill="${C.yellow}" stroke="${C.ink}" stroke-width="3"/><text x="${x}" y="${y+7}" text-anchor="middle" font-size="19" font-weight="800" fill="${C.ink}" font-family="${FONT}">${n}</text>`;
+function springScale(x,hookY,F,w,dir){
+  const cap=[50,100,200,500,1000,2000,5000].find(c=>c>=w)||5000,bodyH=120,bw=58;
+  const top=dir===1?hookY+16:hookY-16-bodyH,ext=Math.min(F/cap,1)*64;
+  const a=dir===1?top+16:top+bodyH-16,ind=dir===1?a+14+ext:a-14-ext;
+  let z=`M${x} ${a}`;const n=8,h=(ind-a)/n;for(let i=1;i<=n;i++)z+=` L${x+(i%2?8:-8)} ${a+h*(i-0.5)}`;z+=` L${x} ${ind}`;
+  let o=`<line x1="${x}" y1="${hookY}" x2="${x}" y2="${dir===1?top:top+bodyH}" stroke="${C.ink}" stroke-width="4"/>`;
+  o+=`<rect x="${x-bw/2}" y="${top}" width="${bw}" height="${bodyH}" rx="12" fill="#fff" stroke="${C.ink}" stroke-width="4"/>`;
+  for(let i=0;i<=5;i++){const ty=dir===1?a+14+i*12.8:a-14-i*12.8;o+=`<line x1="${x+14}" y1="${ty}" x2="${x+24}" y2="${ty}" stroke="${C.ink2}" stroke-width="2"/>`;}
+  o+=`<path d="${z}" fill="none" stroke="${C.steelD}" stroke-width="3"/><rect x="${x-17}" y="${ind-3}" width="34" height="6" rx="2" fill="${C.red}"/>`;
+  const ringY=dir===1?top+bodyH+34:top-34;
+  o+=`<line x1="${x}" y1="${dir===1?top+bodyH:top}" x2="${x}" y2="${ringY+(dir===1?-20:20)}" stroke="${C.ink}" stroke-width="4"/><circle cx="${x}" cy="${ringY}" r="20" fill="none" stroke="${C.ink}" stroke-width="7"/>`;
+  o+=tag(x+bw/2+82,top+bodyH/2,`F = ${fmt(F,1)} N`,C.blue,'#fff',21,ansAttr('kF'));
+  return{svg:o,ringY};
+}
+function renderKatrol(){
+  const{KM,w,F,sCm,hCm}=kCalc(),t=katrol.type,pull=katrol.pull,rise=pull/KM,cx=KT.cx,pul=!katrol.touched;
+  let o=BG(700);
+  o+=`<rect x="-1500" y="-1500" width="4000" height="1544" fill="${C.steel}"/><rect x="-1500" y="36" width="4000" height="14" fill="url(#hz)"/><line x1="-1500" y1="50" x2="2500" y2="50" stroke="${C.ink}" stroke-width="4"/>`;
+  let lx,boxTop,floorY,xp,hook0,hookY,sc;
+  if(t==='bebas'){
+    const r=50,yL0=530,yL=yL0-rise,xa=cx-r,xb=cx+r;hook0=450;hookY=hook0-pull;lx=cx;
+    o+=`<rect x="${xa-20}" y="50" width="40" height="18" rx="3" fill="${C.steelD}" stroke="${C.ink}" stroke-width="3"/>`;
+    boxTop=yL+56;floorY=yL0+56+90;
+    o+=`<line x1="${cx}" y1="${yL}" x2="${cx}" y2="${boxTop}" stroke="${C.ink}" stroke-width="7"/>`;
+    o+=sheaveSvg(cx,yL,r)+ropeSvg(`M${xa} 66 L${xa} ${yL} A${r} ${r} 0 0 0 ${xb} ${yL} L${xb} ${hookY}`);
+    o+=numTag(xa,(66+yL)/2,1)+numTag(xb,Math.min(yL-30,(yL+hookY)/2+20),2);
+    xp=xb;sc=springScale(xp,hookY,F,w,-1);
+  }else{
+    const n=t==='tetap'?1:katrol.n,g=56,R2=t==='tetap'?60:50,total=(n-1)*g+2*R2,sx=cx-total/2;
+    const xs=[];for(let i=0;i<n;i++)xs.push(sx+i*g);xp=xs[n-1]+2*R2;
+    const yU=150,yL0=t==='tetap'?420:340,yL=yL0-rise;hook0=250;hookY=hook0+pull;
+    const up=i=>((n-1-i)%2===0);
+    let d=`M${xs[0]} ${up(0)?yL:yU}`;
+    const upC=[],loC=[];
+    for(let i=0;i<n;i++){
+      d+=` L${xs[i]} ${up(i)?yU:yL}`;
+      if(i<n-1){const rr=g/2,mx=(xs[i]+xs[i+1])/2;
+        if(up(i)){d+=` A${rr} ${rr} 0 0 1 ${xs[i+1]} ${yU}`;upC.push(mx);}else{d+=` A${rr} ${rr} 0 0 0 ${xs[i+1]} ${yL}`;loC.push(mx);}}
+    }
+    d+=` A${R2} ${R2} 0 0 1 ${xp} ${yU} L${xp} ${hookY}`;
+    const fin=xs[n-1]+R2;
+    const uMin=Math.min(n%2===0?xs[0]:fin,...upC,fin),uMax=fin;
+    o+=`<rect x="${(uMin+uMax)/2-11}" y="50" width="22" height="${yU-50}" fill="${C.steelD}" stroke="${C.ink}" stroke-width="3"/>`;
+    if(n>1)o+=`<rect x="${uMin-12}" y="${yU-9}" width="${uMax-uMin+24}" height="18" rx="6" fill="${C.steelD}" stroke="${C.ink}" stroke-width="3"/>`;
+    lx=n===1?xs[0]:(xs[0]+xs[n-1])/2;
+    if(n>1){
+      const lMin=Math.min(...loC,n%2===1?xs[0]:Infinity),lMax=Math.max(...loC);
+      o+=`<line x1="${lx}" y1="${yL}" x2="${lx}" y2="${yL+48}" stroke="${C.ink}" stroke-width="7"/>`;
+      o+=`<rect x="${lMin-12}" y="${yL-9}" width="${lMax-lMin+24}" height="18" rx="6" fill="${C.steelD}" stroke="${C.ink}" stroke-width="3"/>`;
+      boxTop=yL+48;floorY=yL0+48+90;
+    }else{boxTop=yL+14;floorY=yL0+14+90;o+=`<circle cx="${lx}" cy="${yL+6}" r="8" fill="none" stroke="${C.ink}" stroke-width="4"/>`;}
+    upC.forEach(x=>o+=sheaveSvg(x,yU,g/2));o+=sheaveSvg(fin,yU,R2);
+    loC.forEach(x=>o+=sheaveSvg(x,yL,g/2));
+    o+=ropeSvg(d);
+    xs.forEach((x,i)=>o+=numTag(x,(yU+yL)/2+(n===1?40:0),i+1));
+    sc=springScale(xp,hookY,F,w,1);
+  }
+  o+=`<rect x="${lx-150}" y="${floorY}" width="300" height="2000" fill="url(#hatch)" stroke="${C.ink}" stroke-width="4"/><line x1="${lx-150}" y1="${floorY}" x2="${lx+150}" y2="${floorY}" stroke="${C.ink}" stroke-width="4"/>`;
+  o+=loadBox(lx,boxTop+90,katrol.kg,120,90);
+  o+=arrow(lx-84,boxTop+18,lx-84,boxTop+92,C.red,7)+tag(lx-84,boxTop-8,`w = ${fmt(w,0)} N`,C.red,'#fff',19);
+  o+=sc.svg;
+  if(pull>0){
+    o+=`<line x1="${xp-40}" y1="${hook0}" x2="${xp+40}" y2="${hook0}" stroke="${C.blue}" stroke-width="3" stroke-dasharray="7 6"/>`;
+    o+=vdim(xp+76,Math.min(hook0,hookY),Math.max(hook0,hookY),C.blue,`s = ${fmt(sCm,1)} cm`);
+    if(rise>2){const y1=boxTop+90,x=lx-120;o+=`<line x1="${x}" y1="${y1}" x2="${x}" y2="${floorY}" stroke="${C.red}" stroke-width="4"/>`+[y1,floorY].map(y=>`<line x1="${x-12}" y1="${y}" x2="${x+12}" y2="${y}" stroke="${C.red}" stroke-width="4"/>`).join('')+tag(x-78,(y1+floorY)/2,`h = ${fmt(hCm,1)} cm`,C.red,'#fff',19);}
+  }
+  o+=handle(xp,sc.ringY,'pull',pul,44);
+  $('#katrol-svg').innerHTML=o;
+}
+function kUpdate(){
+  const{KM,w,F,sCm,hCm}=kCalc(),t=katrol.type,bebas=t==='bebas';
+  $('#katrol-mission').textContent=KTXT[t].mission;
+  $$('#katrol-type button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t===t)));
+  $('#katrol-nwrap').style.display=t==='majemuk'?'':'none';
+  $('#katrol-n').innerHTML=`${katrol.n} tali<small>menopang katrol bawah</small>`;
+  $('#katrol-pull').textContent=bebas?'▲ Tarik ke atas':'▼ Tarik ke bawah';
+  $('#katrol-rel').textContent=bebas?'▼ Ulur':'▲ Ulur';
+  $('#katrol-hint').textContent=bebas?'Tarik lingkaran kuning ke atas':'Tarik lingkaran kuning ke bawah';
+  $('#katrol-ro').innerHTML=
+    `<div class="ro"><span>Tali ditarik (s)</span><b>${fmt(sCm,1)} cm</b></div><div class="ro"><span>Beban naik (h)</span><b>${fmt(hCm,1)} cm</b></div>`+
+    `<div class="ro"><span>Usaha kamu (F × s)</span><b ${ansAttr('kW1')}>${fmt(F*sCm/100,2)} J</b></div><div class="ro"><span>Usaha angkat (w × h)</span><b ${ansAttr('kW2')}>${fmt(w*hCm/100,2)} J</b></div>`;
+  if(katrol.pull<=0)setStatus('#katrol-status',bebas?'Tarik pegangan kuning ke atas 👆':'Tarik pegangan kuning ke bawah 👇','warn');
+  else if(katrol.pull>=KT.max)setStatus('#katrol-status',`Mentok! Beban naik ${fmt(hCm,1)} cm`,'ok');
+  else setStatus('#katrol-status',`Beban naik ${fmt(hCm,1)} cm`,'');
+  $('#katrol-formula').innerHTML=
+    `<div class="eq"><span class="k">Keuntungan mekanis</span><span class="big">KM = jumlah tali penopang = <span ${ansAttr('kKM')}>${KM}</span></span></div>`+
+    `<div class="eq"><span class="tok f">F</span>=<span class="tok w">w</span>÷ KM =<span class="tok w">${fmt(w,0)} N</span>÷ <span ${ansAttr('kKM')}>${KM}</span><span class="big">→ F = <span ${ansAttr('kF')}>${fmt(F,1)} N</span></span></div>`+
+    `<div class="eq"><span class="k">Jarak</span><span class="tok f">s</span>= KM ×<span class="tok w">h</span></div>`;
+  renderKatrol();
+}
+function initKatrol(){
+  initExamples('katrol');
+  katrolSync=mountLoadPicker('katrol',katrol,kUpdate);
+  $('#katrol-type').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;katrol.type=b.dataset.t;katrol.pull=0;setExamples('katrol',KTXT[katrol.type].ex);kUpdate();});
+  $$('[data-kn]').forEach(b=>holdable(b,()=>{katrol.n=clamp(katrol.n+ +b.dataset.kn,2,6);kUpdate();}));
+  holdable($('#katrol-pull'),()=>{katrol.pull=clamp(katrol.pull+4,0,KT.max);katrol.touched=true;kUpdate();});
+  holdable($('#katrol-rel'),()=>{katrol.pull=clamp(katrol.pull-4,0,KT.max);kUpdate();});
+  enableDrag($('#katrol-svg'),(key,pt,first)=>{
+    if(first){kStart={y:pt.y,pull:katrol.pull};return;}
+    const dir=katrol.type==='bebas'?-1:1;
+    katrol.pull=clamp(kStart.pull+(pt.y-kStart.y)*dir,0,KT.max);katrol.touched=true;kUpdate();
+  });
+  setExamples('katrol',KTXT.tetap.ex);kUpdate();
+}
+function katrolReset(){katrol.pull=0;katrol.kg=19;katrol.n=4;katrolSync();kUpdate();}
+function katrolRecord(){const{KM,w,F,sCm,hCm}=kCalc();rows.katrol.push({type:{tetap:'Tetap',bebas:'Bebas',majemuk:'Majemuk'}[katrol.type],w,KM,F,s:sCm,h:hCm});return rows.katrol.length;}
+
+/* =====================================================
+   BIDANG MIRING
+   ===================================================== */
+const BM_EX=[
+  {name:'♿ Ramp kursi roda',text:'Jalur landai di sekolah atau mal adalah bidang miring. Lintasannya lebih panjang daripada tangga, tapi gaya untuk mendorong kursi roda jadi kecil.'},
+  {name:'Jalan berkelok di gunung',text:'Jalan ke puncak dibuat berkelok supaya tanjakannya landai. Jaraknya lebih jauh, tapi kendaraan dan kaki kamu tidak butuh gaya sebesar kalau jalannya lurus menanjak.'},
+  {name:'Tangga',text:'Tangga itu bidang miring yang diberi pijakan. Makin landai tangganya, makin ringan langkah kita, tapi makin panjang juga jaraknya.'},
+  {name:'Sekrup dan baut',text:'Ulir sekrup sebenarnya bidang miring yang dililitkan ke batang. Makin rapat ulirnya, makin ringan diputar, tapi putarannya makin banyak.'},
+  {name:'Pisau dan kapak',text:'Mata pisau dan kapak berbentuk baji, yaitu dua bidang miring yang saling membelakangi. Gaya dorong ke bawah diubah jadi gaya membelah ke samping.'}
+];
+const bm={kg:30,h:1.5,s:4.5,fric:false,p:0,touched:false};
+const BMG={ground:640,xr:820,sc:150,mu:0.25};
+let bmSync;
+const bmSMin=()=>Math.max(1.5,r1(bm.h+0.3));
+function bmCalc(){
+  const w=bm.kg*G,h=bm.h,s=bm.s,b=Math.sqrt(Math.max(s*s-h*h,0)),ideal=w*h/s,real=w*(h+BMG.mu*b)/s,F=bm.fric?real:ideal;
+  return{w,h,s,b,ideal,real,F,KMi:s/h,KM:w/F,ang:Math.atan2(h,b)};
+}
+function renderBM(){
+  const{w,h,s,b,F,ang}=bmCalc(),{ground:g,xr,sc}=BMG,xl=xr-b*sc,yt=g-h*sc,pul=!bm.touched;
+  const L=s*sc,ux=(xr-xl)/L,uy=(yt-g)/L,nx=uy,ny=-ux,T=14,deg=ang*180/Math.PI;
+  const lenOf=v=>30+120*Math.min(v/(2*w),1);
+  let o=BG(700);
+  o+=`<rect x="-1500" y="${g}" width="4000" height="2000" fill="url(#hatch)"/><line x1="-1500" y1="${g}" x2="2500" y2="${g}" stroke="${C.ink}" stroke-width="4"/>`;
+  o+=`<rect x="${xr}" y="${yt}" width="180" height="${g-yt}" fill="${C.steel}" stroke="${C.ink}" stroke-width="4"/><rect x="${xr}" y="${yt}" width="180" height="16" fill="url(#hz)" stroke="${C.ink}" stroke-width="3"/>`;
+  o+=tag(xr+112,yt-30,'Bak truk',C.ink,'#fff',17);
+  o+=`<polygon points="${xl},${g} ${xr},${yt} ${xr},${g}" fill="${C.wood}" fill-opacity=".13" stroke="${C.woodD}" stroke-width="2" stroke-dasharray="8 8"/>`;
+  o+=`<polygon points="${xl},${g} ${xr},${yt} ${xr+nx*T},${yt+ny*T} ${xl+nx*T},${g+ny*T}" fill="${C.wood}" stroke="${C.woodD}" stroke-width="4" stroke-linejoin="round"/>`;
+  o+=`<path d="M${xl+70} ${g} A70 70 0 0 0 ${xl+70*Math.cos(ang)} ${g-70*Math.sin(ang)}" fill="none" stroke="${C.ink2}" stroke-width="3"/><text x="${xl+84}" y="${g-12}" font-size="18" fill="${C.ink2}" font-family="${FONT}" font-weight="600">${fmt(deg,0)}°</text>`;
+  o+=vdim(xr+40,yt,g,C.red,`h = ${fmt(h,1)} m`);
+  const off=58,a1=[xl+nx*off,g+ny*off],a2=[xr+nx*off,yt+ny*off];
+  o+=`<line x1="${a1[0]}" y1="${a1[1]}" x2="${a2[0]}" y2="${a2[1]}" stroke="${C.blue}" stroke-width="4"/>`;
+  [a1,a2].forEach(q=>o+=`<line x1="${q[0]-nx*12}" y1="${q[1]-ny*12}" x2="${q[0]+nx*12}" y2="${q[1]+ny*12}" stroke="${C.blue}" stroke-width="4"/>`);
+  o+=tag(a1[0]+(a2[0]-a1[0])*0.74,a1[1]+(a2[1]-a1[1])*0.74,`s = ${fmt(s,1)} m`,C.blue,'#fff',19);
+  // kotak
+  const m=Math.min(60/L,0.5),t=m+(1-2*m)*bm.p;
+  const cxp=xl+(xr-xl)*t+nx*T,cyp=g+(yt-g)*t+ny*T;
+  const lf=lenOf(F),co=Math.cos(ang),si=Math.sin(ang);
+  const rot=(lx,ly)=>[cxp+lx*co+ly*si,cyp-lx*si+ly*co];
+  o+=`<g transform="translate(${cxp} ${cyp}) rotate(${-deg})">${loadBox(0,0,bm.kg,100,80)}${arrow(-54-lf,-40,-56,-40,C.blue)}</g>`;
+  const[fx,fy]=rot(-60-lf/2,-162);
+  o+=tag(fx,fy,`F = ${fmt(F,1)} N`,C.blue,'#fff',20,ansAttr('bmF'));
+  const[wx,wy]=rot(0,-40);
+  o+=arrow(wx+62,wy,wx+62,wy+lenOf(w),C.red)+tag(wx+62+86,wy+lenOf(w)*0.55,`w = ${fmt(w,0)} N`,C.red,'#fff',19);
+  o+=handle(xr,yt,'top',pul,36)+handle(xl,g,'foot',pul,36);
+  const[hx,hy]=rot(0,-104);{const[sx,sy]=rot(0,-80);o+=`<line x1="${sx}" y1="${sy}" x2="${hx}" y2="${hy}" stroke="${C.ink}" stroke-width="4" stroke-dasharray="5 5"/>`;}o+=handle(hx,hy,'load',pul,40);
+  $('#bm-svg').innerHTML=o;
+}
+function bmUpdate(){
+  const{w,h,s,ideal,real,F,KMi,KM}=bmCalc();
+  $('#bm-h').innerHTML=`${fmt(h,1)} m<small>tinggi (h)</small>`;
+  $('#bm-s').innerHTML=`${fmt(s,1)} m<small>panjang papan (s)</small>`;
+  $('#bm-fric').setAttribute('aria-pressed',String(bm.fric));
+  const pct=v=>Math.max(1.5,Math.min(v/w,1)*100);
+  $('#bm-cmp').innerHTML=
+    `<div><span>Angkat langsung</span><i class="r" style="width:100%"></i><b>${fmt(w,0)} N</b></div>`+
+    `<div><span>Dorong di papan</span><i ${ansAttr('bmF')} style="width:${pct(F)}%"></i><b ${ansAttr('bmF')}>${fmt(F,1)} N</b></div>`;
+  $('#bm-ro').innerHTML=
+    `<div class="ro"><span>Jarak dorong</span><b>${fmt(bm.p*s,2)} m</b></div><div class="ro"><span>Naik setinggi</span><b>${fmt(bm.p*h,2)} m</b></div>`+
+    `<div class="ro"><span>Usaha kamu (F × s)</span><b ${ansAttr('bmW1')}>${fmt(F*s*bm.p,0)} J</b></div><div class="ro"><span>Usaha angkat (w × h)</span><b ${ansAttr('bmW2')}>${fmt(w*h*bm.p,0)} J</b></div>`;
+  if(bm.p<=0)setStatus('#bm-status','Dorong kotaknya ke atas, yuk 👆','warn');
+  else if(bm.p>=1)setStatus('#bm-status','Sampai di bak truk! 🎉','ok');
+  else setStatus('#bm-status',`Sudah naik ${fmt(bm.p*h,2)} m`,'');
+  $('#bm-formula').innerHTML=
+    `<div class="eq"><span class="tok f">F</span>×<span class="tok f">s</span>=<span class="tok w">w</span>×<span class="tok w">h</span></div>`+
+    `<div class="eq">F =<span class="tok w">${fmt(w,0)} N</span>×<span class="tok w">${fmt(h,1)} m</span>÷<span class="tok f">${fmt(s,1)} m</span><span class="big">= <span ${ansAttr('bmFi')}>${fmt(ideal,1)} N</span></span></div>`+
+    `<div class="eq"><span class="k">KM ideal</span><span class="big">s ÷ h = <span ${ansAttr('bmKM')}>${fmt(KMi,2)}</span></span></div>`+
+    (bm.fric?`<div class="eq"><span class="tok y">Ada gesekan</span><span class="big">F nyata = <span ${ansAttr('bmF')}>${fmt(real,1)} N</span></span><span class="k">KM nyata</span><span class="big"><span ${ansAttr('bmKMr')}>${fmt(KM,2)}</span></span></div>`:'');
+  renderBM();
+}
+function initBM(){
+  initExamples('bm');setExamples('bm',BM_EX);
+  bmSync=mountLoadPicker('bm',bm,bmUpdate);
+  $$('[data-bm]').forEach(btn=>holdable(btn,()=>{
+    const d=+btn.dataset.d;
+    if(btn.dataset.bm==='h'){bm.h=clamp(r1(bm.h+d),0.5,2.5);bm.s=Math.max(bm.s,bmSMin());}
+    else bm.s=clamp(r1(bm.s+d),bmSMin(),5);
+    bm.touched=true;bmUpdate();
+  }));
+  $('#bm-fric').addEventListener('click',()=>{bm.fric=!bm.fric;bmUpdate();toast(bm.fric?'Gesekan nyala: sebagian gaya dipakai buat melawan gesekan papan.':'Gesekan mati: papan dianggap licin sempurna (ideal).');});
+  holdable($('#bm-push'),()=>{bm.p=clamp(bm.p+0.015,0,1);bm.touched=true;bmUpdate();});
+  holdable($('#bm-back'),()=>{bm.p=clamp(bm.p-0.015,0,1);bmUpdate();});
+  enableDrag($('#bm-svg'),(key,pt)=>{
+    const{ground:g,xr,sc}=BMG;
+    if(key==='top'){bm.h=clamp(r1((g-pt.y)/sc),0.5,2.5);bm.s=Math.max(bm.s,bmSMin());}
+    else if(key==='foot'){const b=Math.max(0,(xr-pt.x)/sc);bm.s=clamp(r1(Math.hypot(b,bm.h)),bmSMin(),5);}
+    else{const{b,h,s}=bmCalc(),xl=xr-b*sc,yt=g-h*sc,vx=xr-xl,vy=yt-g,L2=vx*vx+vy*vy,m=Math.min(60/(s*sc),0.5);
+      const t=((pt.x-xl)*vx+(pt.y-g)*vy)/L2;bm.p=clamp((t-m)/(1-2*m),0,1);}
+    bm.touched=true;bmUpdate();
+  });
+  bmUpdate();
+}
+function bmReset(){Object.assign(bm,{kg:30,h:1.5,s:4.5,fric:false,p:0});bmSync();bmUpdate();}
+function bmRecord(){const{w,h,s,F,KM}=bmCalc();rows.bm.push({w,h,s,fric:bm.fric,F,KM});return rows.bm.length;}
+
+/* =====================================================
+   RODA & POROS
+   ===================================================== */
+const RP_EX=[
+  {name:'Setir mobil',text:'Lingkaran setir adalah roda, batang di tengahnya poros. Tangan di pinggir setir cukup memberi gaya kecil untuk memutar roda-roda mobil.'},
+  {name:'Obeng',text:'Gagang obeng yang tebal jadi roda, batang besinya jadi poros. Makanya obeng bergagang besar lebih enak buat membuka sekrup yang kencang.'},
+  {name:'Gagang pintu',text:'Kenop pintu berperan sebagai roda dan batang kuncinya sebagai poros. Coba putar pintu dari batangnya langsung, pasti jauh lebih berat!'},
+  {name:'Kerekan sumur',text:'Engkol yang diputar tangan jadi roda, silinder tempat tali tergulung jadi poros. Ember berat bisa terangkat dengan gaya kecil.'},
+  {name:'Keran air',text:'Pegangan keran jadi roda, batang ulirnya jadi poros. Pegangan yang lebar bikin keran mudah dibuka dan ditutup.'}
+];
+const rp={kg:12,R:30,r:5,phi:0,touched:false};
+const RPG={cx:420,cy:232,sc:4.6,vis:1.6,maxRise:100,floor:680};
+let rpSync,rpPrev=0;
+function rpCalc(){const w=rp.kg*G,F=w*rp.r/rp.R,KM=rp.R/rp.r,rise=rp.r*rp.phi,hand=rp.R*rp.phi;return{w,F,KM,rise,hand,turns:rp.phi/(2*Math.PI)};}
+function renderRP(){
+  const{w,F,rise}=rpCalc(),{cx,cy,sc,vis,floor}=RPG,Rp=rp.R*sc,rpx=rp.r*sc,pul=!rp.touched;
+  const lenOf=v=>30+120*Math.min(v/(2*w),1);
+  let o=BG(700);
+  o+=`<rect x="-1500" y="${floor}" width="4000" height="2000" fill="url(#hatch)"/><line x1="-1500" y1="${floor}" x2="2500" y2="${floor}" stroke="${C.ink}" stroke-width="4"/>`;
+  const fr=`M${cx-175} ${floor} L${cx} ${cy} L${cx+175} ${floor}`;
+  o+=`<path d="${fr}" fill="none" stroke="${C.woodD}" stroke-width="24" stroke-linejoin="round"/><path d="${fr}" fill="none" stroke="${C.wood}" stroke-width="15" stroke-linejoin="round"/>`;
+  const deg=rp.phi*180/Math.PI;
+  let wh=`<circle cx="${cx}" cy="${cy}" r="${Rp}" fill="none" stroke="${C.ink}" stroke-width="18"/><circle cx="${cx}" cy="${cy}" r="${Rp}" fill="none" stroke="${C.blue}" stroke-width="10"/>`;
+  for(let k=0;k<4;k++){const a=k*Math.PI/2+Math.PI/4;wh+=`<line x1="${cx+rpx*Math.cos(a)}" y1="${cy+rpx*Math.sin(a)}" x2="${cx+(Rp-6)*Math.cos(a)}" y2="${cy+(Rp-6)*Math.sin(a)}" stroke="${C.steelD}" stroke-width="9" stroke-linecap="round"/>`;}
+  wh+=`<circle cx="${cx}" cy="${cy}" r="${rpx+4}" fill="${C.rope}" stroke="${C.ink}" stroke-width="4"/><circle cx="${cx}" cy="${cy}" r="${Math.max(rpx-5,4)}" fill="${C.red}" stroke="${C.ink}" stroke-width="3"/><line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-Math.max(rpx-5,4)}" stroke="#fff" stroke-width="3"/>`;
+  o+=`<g transform="rotate(${deg.toFixed(2)} ${cx} ${cy})">${wh}</g>`;
+  // tali & beban
+  const rx=cx-rpx-2,boxTop=floor-88-rise*vis;
+  o+=`<line x1="${rx}" y1="${cy}" x2="${rx}" y2="${boxTop}" stroke="${C.ink}" stroke-width="9"/><line x1="${rx}" y1="${cy}" x2="${rx}" y2="${boxTop}" stroke="${C.rope}" stroke-width="4"/>`;
+  o+=loadBox(rx,boxTop+88,rp.kg,104,88);
+  o+=arrow(rx-78,boxTop+14,rx-78,boxTop+14+lenOf(w)*0.7,C.red,7)+tag(rx-78,boxTop-14,`w = ${fmt(w,0)} N`,C.red,'#fff',19);
+  // ukuran R & r
+  const a=-Math.PI/2+rp.phi,kx=cx+Rp*Math.cos(a),ky=cy+Rp*Math.sin(a);
+  o+=`<line x1="${cx}" y1="${cy}" x2="${kx}" y2="${ky}" stroke="${C.blue}" stroke-width="4" stroke-dasharray="9 7"/>`;
+  const dy=cy+Rp+36;
+  o+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${dy+12}" stroke="${C.blue}" stroke-width="2" stroke-dasharray="4 5"/><line x1="${cx+Rp}" y1="${cy}" x2="${cx+Rp}" y2="${dy+12}" stroke="${C.blue}" stroke-width="2" stroke-dasharray="4 5"/>`;
+  o+=`<line x1="${cx}" y1="${dy}" x2="${cx+Rp}" y2="${dy}" stroke="${C.blue}" stroke-width="4"/>`+[cx,cx+Rp].map(x=>`<line x1="${x}" y1="${dy-11}" x2="${x}" y2="${dy+11}" stroke="${C.blue}" stroke-width="4"/>`).join('');
+  o+=tag(cx+Rp/2,dy,`R = ${rp.R} cm`,C.blue,'#fff',19);
+  const ry=cy-rpx-4,rtx=cx-Rp-78;
+  o+=`<line x1="${cx}" y1="${ry}" x2="${rtx+40}" y2="${ry}" stroke="${C.red}" stroke-width="3"/>`;
+  o+=tag(rtx,ry,`r = ${rp.r} cm`,C.red,'#fff',19);
+  // gaya di pegangan
+  const tx=-Math.sin(a),ty=Math.cos(a),lf=lenOf(F);
+  o+=arrow(kx+tx*26,ky+ty*26,kx+tx*(26+lf),ky+ty*(26+lf),C.blue);
+  o+=`<g><rect x="690" y="270" width="270" height="118" rx="16" fill="#fff" stroke="${C.blue}" stroke-width="4"/><text x="825" y="308" text-anchor="middle" font-size="19" font-weight="600" fill="${C.ink2}" font-family="${FONT}">Gaya putar di pegangan</text><g ${ansAttr('rpF')}><text x="825" y="360" text-anchor="middle" font-size="38" font-weight="800" fill="${C.blue}" font-family="${FONT}">F = ${fmt(F,1)} N</text></g></g>`;
+  o+=`<circle cx="${kx}" cy="${ky}" r="17" fill="${C.yellow}" stroke="${C.ink}" stroke-width="4"/>`;
+  o+=handle(kx,ky,'knob',pul,46);
+  $('#rp-svg').innerHTML=o;
+}
+function rpUpdate(){
+  const{w,F,KM,rise,hand,turns}=rpCalc(),max=RPG.maxRise/rp.r;
+  $('#rp-R').innerHTML=`${rp.R} cm<small>jari-jari roda (R)</small>`;
+  $('#rp-r').innerHTML=`${rp.r} cm<small>jari-jari poros (r)</small>`;
+  $('#rp-ro').innerHTML=
+    `<div class="ro"><span>Putaran</span><b>${fmt(turns,2)} kali</b></div><div class="ro"><span>Beban naik</span><b>${fmt(rise,1)} cm</b></div>`+
+    `<div class="ro"><span>Tangan menempuh</span><b>${fmt(hand,0)} cm</b></div><div class="ro"><span>Usaha (F × jarak tangan)</span><b ${ansAttr('rpW')}>${fmt(F*hand/100,2)} J</b></div>`;
+  if(rp.phi<=0)setStatus('#rp-status','Putar pegangan kuning searah jarum jam ↻','warn');
+  else if(rp.phi>=max-1e-6)setStatus('#rp-status','Beban sampai atas! 🎉','ok');
+  else setStatus('#rp-status',`${fmt(turns,1)} putaran, beban naik ${fmt(rise,0)} cm`,'');
+  $('#rp-formula').innerHTML=
+    `<div class="eq"><span class="tok f">F</span>×<span class="tok f">R</span>=<span class="tok w">w</span>×<span class="tok w">r</span></div>`+
+    `<div class="eq">F =<span class="tok w">${fmt(w,0)} N</span>×<span class="tok w">${rp.r} cm</span>÷<span class="tok f">${rp.R} cm</span><span class="big">= <span ${ansAttr('rpF')}>${fmt(F,1)} N</span></span></div>`+
+    `<div class="eq"><span class="k">Keuntungan mekanis</span><span class="big">KM = R ÷ r = <span ${ansAttr('rpKM')}>${fmt(KM,2)}</span></span></div>`;
+  renderRP();
+}
+function initRP(){
+  initExamples('rp');setExamples('rp',RP_EX);
+  rpSync=mountLoadPicker('rp',rp,rpUpdate);
+  $$('[data-rp]').forEach(btn=>holdable(btn,()=>{
+    const d=+btn.dataset.d;
+    if(btn.dataset.rp==='R')rp.R=clamp(rp.R+d,Math.max(10,rp.r+6),40);else rp.r=clamp(rp.r+d,2,Math.min(15,rp.R-6));
+    rp.phi=0;rp.touched=true;rpUpdate();
+  }));
+  const turn=d=>{rp.phi=clamp(rp.phi+d,0,RPG.maxRise/rp.r);rp.touched=true;rpUpdate();};
+  holdable($('#rp-turn'),()=>turn(0.12));holdable($('#rp-back'),()=>turn(-0.12));
+  enableDrag($('#rp-svg'),(key,pt,first)=>{
+    const a=Math.atan2(pt.y-RPG.cy,pt.x-RPG.cx);
+    if(first){rpPrev=a;return;}
+    let d=a-rpPrev;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;rpPrev=a;turn(d);
+  });
+  rpUpdate();
+}
+function rpReset(){Object.assign(rp,{kg:12,R:30,r:5,phi:0});rpSync();rpUpdate();}
+function rpRecord(){const{w,F,KM}=rpCalc();rows.rp.push({w,R:rp.R,r:rp.r,F,KM});return rows.rp.length;}
+
+/* =====================================================
+   TABEL
+   ===================================================== */
+const TDEF={
+  tuas:{title:'Tuas',cols:[['Jenis',r=>'Jenis '+r.j],['w (N)',r=>fmt(r.w,0)],['lb (cm)',r=>r.lb],['lk (cm)',r=>r.lk],['F (N)',r=>fmt(r.F,1)],['KM',r=>fmt(r.KM,2)]],q:[
+    ['Kalau lengan kuasa (lk) makin panjang, gaya F yang dibutuhkan makin apa?','Makin kecil. Dari w × lb = F × lk, kalau lk membesar sementara w dan lb tetap, F harus mengecil supaya kedua ruas tetap sama.'],
+    ['Kenapa KM tuas jenis 3 selalu kurang dari 1? Terus gunanya apa?','Karena kuasa ada di tengah, lengan kuasa selalu lebih pendek dari lengan beban. Gayanya jadi lebih besar, tapi ujung beban bergerak lebih jauh dan cepat. Contohnya lengan kita saat melempar bola.'],
+    ['Cek datamu: apakah KM = w ÷ F selalu sama dengan lk ÷ lb?','Ya, pada tuas ideal keduanya selalu sama. Di percobaan nyata bisa beda sedikit karena berat papan dan gesekan di titik tumpu.']]},
+  katrol:{title:'Katrol',cols:[['Jenis',r=>r.type],['w (N)',r=>fmt(r.w,0)],['Tali penopang',r=>r.KM],['F (N)',r=>fmt(r.F,1)],['s tali (cm)',r=>fmt(r.s,1)],['h beban (cm)',r=>fmt(r.h,1)]],q:[
+    ['Bandingkan s (tali ditarik) dan h (beban naik). Apa hubungannya dengan KM?','s = KM × h. Pada takal 4 tali, menarik tali 40 cm hanya menaikkan beban 10 cm. Gaya jadi seperempat, tapi jaraknya 4 kali lipat.'],
+    ['Katrol tetap KM-nya 1. Kenapa tetap dipakai di tiang bendera?','Karena katrol tetap mengubah arah gaya. Menarik tali ke bawah jauh lebih mudah (bisa pakai berat badan) daripada memanjat lalu menarik bendera ke atas.'],
+    ['Apakah usaha (F × s) jadi lebih kecil kalau pakai katrol majemuk?','Tidak. Pada katrol ideal, F × s selalu sama dengan w × h. Pesawat sederhana memperkecil gaya, bukan memperkecil usaha.']]},
+  bm:{title:'Bidang miring',cols:[['w (N)',r=>fmt(r.w,0)],['h (m)',r=>fmt(r.h,1)],['s (m)',r=>fmt(r.s,1)],['Gesekan',r=>r.fric?'Ada':'Tidak'],['F (N)',r=>fmt(r.F,1)],['KM',r=>fmt(r.KM,2)]],q:[
+    ['Makin panjang papannya, gaya dorong makin apa? Tapi apa “harga” yang harus dibayar?','Makin kecil, karena F = w × h ÷ s. Harganya: jarak dorong jadi lebih jauh.'],
+    ['Nyalakan gesekan. Kenapa KM nyata lebih kecil dari KM ideal?','Sebagian gaya dipakai untuk melawan gesekan antara kotak dan papan. Gaya dorong jadi lebih besar, sehingga KM = w ÷ F mengecil.'],
+    ['Kenapa jalan di pegunungan dibuat berkelok-kelok?','Jalan berkelok itu bidang miring yang panjang. Tanjakannya jadi landai, sehingga gaya yang diperlukan lebih kecil walaupun jaraknya lebih jauh.']]},
+  rp:{title:'Roda dan poros',cols:[['w (N)',r=>fmt(r.w,0)],['R (cm)',r=>r.R],['r (cm)',r=>r.r],['F (N)',r=>fmt(r.F,1)],['KM',r=>fmt(r.KM,2)]],q:[
+    ['Kalau jari-jari roda (R) diperbesar, gaya putar makin apa?','Makin kecil. F = w × r ÷ R, jadi R yang besar membuat F kecil.'],
+    ['Kenapa gagang obeng dibuat tebal?','Gagang berperan sebagai roda (R besar) dan batang sebagai poros (r kecil). KM = R ÷ r jadi besar, sekrup lebih mudah diputar.'],
+    ['Dalam satu putaran, tangan menempuh 2πR dan beban naik 2πr. Apa hubungannya dengan KM?','Perbandingan jarak tangan dan jarak naik beban = R ÷ r = KM. Gaya yang lebih kecil dibayar dengan jarak tangan yang lebih jauh.']]}
+};
+function renderTables(){
+  $('#tgrid').innerHTML=Object.entries(TDEF).map(([k,d])=>{
+    const R=rows[k];
+    const body=R.length?
+      `<div class="twrap"><table><thead><tr><th>No</th>${d.cols.map(c=>`<th>${c[0]}</th>`).join('')}<th>Hemat gaya?</th><th></th></tr></thead><tbody>${R.map((r,i)=>`<tr><td>${i+1}</td>${d.cols.map(c=>`<td>${c[1](r)}</td>`).join('')}<td><div class="bar"><i style="width:${Math.max(2,Math.min(r.F/r.w,2)*50)}%"></i></div></td><td class="del"><button data-del="${k}" data-i="${i}" aria-label="Hapus baris ${i+1}">×</button></td></tr>`).join('')}</tbody></table></div><p class="legend">Batang biru = gaya F. Garis merah = berat beban. Batang biru belum sampai garis merah artinya kamu hemat gaya.</p>`
+      :`<div class="empty"><span>Belum ada data. Buka lab ${d.title}, atur percobaanmu, lalu tekan <b>Catat ke tabel</b>.</span><button class="btn sm" data-go="${k}">Buka lab</button></div>`;
+    return `<article class="tcard"><header><h3>${d.title}</h3><span class="k">${R.length} data</span>${R.length?`<button class="btn sm ghost" data-clear="${k}">Hapus semua</button>`:''}</header>${body}${d.q.map(q=>`<details class="think"><summary>${q[0]}</summary><p>${q[1]}</p></details>`).join('')}</article>`;
+  }).join('');
+}
+function tableText(sep){
+  const out=[],grp=$('#kelompok').value.trim();
+  out.push('Tabel pengamatan pesawat sederhana'+(grp?sep+grp:''));out.push('');
+  for(const[k,d]of Object.entries(TDEF)){
+    out.push(d.title);out.push(['No',...d.cols.map(c=>c[0])].join(sep));
+    rows[k].forEach((r,i)=>out.push([i+1,...d.cols.map(c=>String(c[1](r)))].join(sep)));
+    out.push('');
+  }
+  return out.join('\n');
+}
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);return true;}catch(e){
+    const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();
+    let ok=false;try{ok=document.execCommand('copy');}catch(_){}ta.remove();return ok;
+  }
+}
+function initTables(){
+  $('#tgrid').addEventListener('click',e=>{
+    const del=e.target.closest('[data-del]');if(del){rows[del.dataset.del].splice(+del.dataset.i,1);renderTables();return;}
+    const cl=e.target.closest('[data-clear]');if(cl){rows[cl.dataset.clear].length=0;renderTables();toast('Data '+TDEF[cl.dataset.clear].title.toLowerCase()+' dihapus.');}
+  });
+  $('#btn-copy').addEventListener('click',async()=>{const ok=await copyText(tableText('\t'));toast(ok?'Tabel tersalin! Tempel di Excel, Google Sheets, atau Word.':'Gagal menyalin. Coba tombol Unduh CSV, ya.');});
+  $('#btn-csv').addEventListener('click',()=>{
+    const blob=new Blob(['\ufeff'+tableText(';')],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tabel-pengamatan-pesawat-sederhana.csv';
+    document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);toast('File CSV sedang diunduh.');
+  });
+}
+
+/* =====================================================
+   KUIS
+   ===================================================== */
+const BANK=[
+  {topic:'Tuas',lv:'C3',q:'Budi memakai linggis sepanjang 150 cm untuk mencongkel batu seberat 600 N. Titik tumpunya 30 cm dari batu. Berapa gaya minimal yang harus Budi berikan di ujung linggis?',opts:['150 N','120 N','300 N','2.400 N'],exp:'lb = 30 cm, lk = 150 − 30 = 120 cm. F = w × lb ÷ lk = 600 × 30 ÷ 120 = 150 N. Kalau dapat 2.400 N, berarti lengannya kebalik.'},
+  {topic:'Tuas',lv:'C3',q:'Andi (40 kg) duduk 1,5 m dari titik tumpu jungkat-jungkit. Supaya seimbang, Budi (60 kg) harus duduk di mana?',opts:['1 m dari titik tumpu','1,5 m dari titik tumpu','2,25 m dari titik tumpu','0,5 m dari titik tumpu'],exp:'400 N × 1,5 m = 600 N × x, jadi x = 1 m. Yang lebih berat harus duduk lebih dekat ke titik tumpu.'},
+  {topic:'Tuas',lv:'C4',q:'Lengan bawah manusia adalah tuas jenis 3 dengan KM kurang dari 1. Kenapa susunan ini tetap menguntungkan bagi tubuh?',opts:['Tangan bisa bergerak jauh dan cepat walaupun otot bekerja lebih keras','Otot jadi butuh gaya lebih kecil dari beban','Tulang jadi tidak menanggung beban sama sekali','Titik tumpu pindah ke telapak tangan saat mengangkat'],exp:'Otot bisep menarik di dekat siku. Gerakan kecil otot menghasilkan gerakan besar dan cepat di telapak tangan, penting buat melempar, meraih, dan menulis.'},
+  {topic:'Tuas',lv:'C3',q:'Saat membuka tutup botol, ujung pembuka menempel di atas tutup, pinggiran tutup dicungkil, dan tangan mengangkat gagang. Alat ini termasuk...',opts:['Tuas jenis 2','Tuas jenis 1','Tuas jenis 3','Roda dan poros'],exp:'Urutannya Titik tumpu, Beban, Kuasa. Bebannya di tengah, jadi tuas jenis 2. Ingat triknya: yang di tengah menentukan jenis.'},
+  {topic:'Tuas',lv:'C4',q:'Pada percobaan tuas, beban dan lengan beban dibuat tetap. Kalau lengan kuasa diperpanjang jadi 2 kali semula, gaya kuasa yang dibutuhkan menjadi...',opts:['Setengah kali semula','2 kali semula','4 kali semula','Tidak berubah'],exp:'F = w × lb ÷ lk. Kalau lk jadi 2 kali, F jadi ½ kali. Gaya berbanding terbalik dengan lengan kuasa.'},
+  {topic:'Katrol',lv:'C3',q:'Pak Joko mengangkat ember pasir seberat 80 N memakai satu katrol tetap. Pernyataan yang benar adalah...',opts:['Gaya tariknya 80 N, keuntungannya arah gaya jadi lebih mudah','Gaya tariknya 40 N karena dibantu katrol','Gaya tariknya 160 N karena tali ditarik ke bawah','Gaya tariknya 0 N karena katrol yang menanggung beban'],exp:'Katrol tetap punya KM = 1, jadi F = w = 80 N. Untungnya, kita bisa menarik ke bawah sambil memanfaatkan berat badan.'},
+  {topic:'Katrol',lv:'C3',q:'Sebuah takal memiliki 4 tali yang menopang katrol bawah. Beban yang diangkat 1.200 N. Berapa gaya tarik minimalnya?',opts:['300 N','400 N','1.200 N','4.800 N'],exp:'KM = jumlah tali penopang = 4. F = 1.200 ÷ 4 = 300 N.'},
+  {topic:'Katrol',lv:'C4',q:'Seorang pekerja menaikkan beban memakai katrol bebas. Ia menarik tali sejauh 4 m. Seberapa tinggi beban naik?',opts:['2 m','4 m','8 m','1 m'],exp:'KM katrol bebas = 2, jadi s = 2 × h. h = 4 ÷ 2 = 2 m. Gaya jadi setengah, tapi tali harus ditarik dua kali lebih jauh.'},
+  {topic:'Katrol',lv:'C4',q:'Dengan gaya tarik 250 N, Pak Dedi bisa mengangkat mesin 1.000 N memakai takal. Minimal berapa tali yang menopang katrol bawah?',opts:['4 tali','2 tali','3 tali','5 tali'],exp:'KM = w ÷ F = 1.000 ÷ 250 = 4. Jadi minimal ada 4 tali penopang.'},
+  {topic:'Bidang miring',lv:'C3',q:'Kotak 1.000 N didorong lewat papan sepanjang 5 m ke panggung setinggi 1 m (gesekan diabaikan). Berapa gaya dorong dan KM-nya?',opts:['200 N dan KM 5','5.000 N dan KM 5','200 N dan KM 0,2','1.000 N dan KM 1'],exp:'F = w × h ÷ s = 1.000 × 1 ÷ 5 = 200 N. KM = s ÷ h = 5.'},
+  {topic:'Bidang miring',lv:'C4',q:'Jalan menuju puncak gunung dibuat berkelok-kelok, bukan lurus menanjak. Alasan paling tepat menurut konsep pesawat sederhana adalah...',opts:['Lintasan jadi lebih panjang dan landai, sehingga gaya yang dibutuhkan lebih kecil','Jarak tempuh jadi lebih pendek','Usaha yang diperlukan jadi nol','Berat kendaraan berkurang saat berbelok'],exp:'Jalan berkelok adalah bidang miring yang panjang. s makin besar, jadi F = w × h ÷ s makin kecil. Jaraknya memang lebih jauh.'},
+  {topic:'Bidang miring',lv:'C4',q:'Rani mau menaikkan kotak 900 N ke bak truk setinggi 1,2 m. Gaya maksimal yang bisa ia berikan 300 N. Berapa panjang papan minimal yang harus dipakai (gesekan diabaikan)?',opts:['3,6 m','2,5 m','0,4 m','3 m'],exp:'F × s = w × h, jadi 300 × s = 900 × 1,2 dan s = 3,6 m. Papan yang lebih pendek butuh gaya lebih dari 300 N.'},
+  {topic:'Roda & poros',lv:'C4',q:'Dua obeng punya batang sama, tapi gagang A berdiameter 2 cm dan gagang B 4 cm. Untuk membuka sekrup yang sangat kencang, mana yang lebih tepat?',opts:['Obeng B, karena jari-jari gagang lebih besar sehingga KM lebih besar','Obeng A, karena gagang kecil lebih mudah digenggam kuat','Sama saja, karena batangnya sama','Obeng A, karena KM gagang kecil lebih besar'],exp:'Gagang = roda, batang = poros. KM = R ÷ r. Gagang B punya R lebih besar, jadi gaya putarnya lebih kecil.'},
+  {topic:'Roda & poros',lv:'C3',q:'Kerekan sumur punya engkol berjari-jari 30 cm dan poros berjari-jari 6 cm. Untuk mengangkat ember 100 N, gaya minimal di engkol adalah...',opts:['20 N','500 N','50 N','5 N'],exp:'F = w × r ÷ R = 100 × 6 ÷ 30 = 20 N. KM-nya 30 ÷ 6 = 5.'},
+  {topic:'Konsep usaha',lv:'C4',q:'Pernyataan paling tepat tentang pesawat sederhana ideal (tanpa gesekan) adalah...',opts:['Memperkecil gaya, tapi jarak tempuh bertambah sehingga usahanya tetap sama','Memperkecil gaya sekaligus memperkecil usaha','Memperkecil jarak sekaligus memperkecil gaya','Menghilangkan usaha yang diperlukan'],exp:'Usaha = gaya × jarak. Pesawat sederhana “menukar” gaya kecil dengan jarak yang lebih jauh. Coba cek angka usaha di lab katrol!'},
+  {topic:'Tuas',lv:'C4',q:'Kamu ingin memotong kawat tebal memakai gunting. Posisi kawat yang paling tepat supaya ringan adalah...',opts:['Sedekat mungkin dengan baut (titik tumpu)','Di ujung mata gunting','Di tengah-tengah mata gunting','Posisinya tidak berpengaruh'],exp:'Kawat dekat baut membuat lengan beban (lb) pendek. Dari F = w × lb ÷ lk, lb kecil berarti F kecil.'}
+];
+const BINS=[{id:'t1',name:'Tuas jenis 1',sub:'tumpu di tengah'},{id:'t2',name:'Tuas jenis 2',sub:'beban di tengah'},{id:'t3',name:'Tuas jenis 3',sub:'kuasa di tengah'},{id:'kt',name:'Katrol',sub:'roda beralur + tali'},{id:'bm',name:'Bidang miring',sub:'permukaan landai'},{id:'rp',name:'Roda & poros',sub:'berputar bersama'}];
+const ITEMS=[
+  ['Gunting','t1','Cari baut di tengah gunting. Itu titik tumpunya.'],['Jungkat-jungkit','t1','Porosnya di tengah, anak-anak di kedua ujung.'],['Tang','t1','Engsel tang ada di antara mulut tang dan gagang.'],['Linggis','t1','Ganjalan (titik tumpu) ada di antara batu dan tangan.'],
+  ['Gerobak dorong','t2','Roda di depan = titik tumpu, barang ada di tengah.'],['Pembuka tutup botol','t2','Tutup botol (beban) ada di antara ujung pembuka dan tangan.'],['Pemecah kemiri','t2','Kemiri diletakkan di antara engsel dan gagang.'],
+  ['Pinset','t3','Jari menekan di tengah, ujung pinset menjepit beban.'],['Alat pancing','t3','Tangan yang menarik ada di tengah joran.'],['Lengan bawah manusia','t3','Siku = titik tumpu, otot bisep menarik di tengah.'],['Sekop','t3','Tangan pendorong ada di tengah gagang.'],
+  ['Tiang bendera','kt','Ada roda kecil beralur di puncak tiang.'],['Crane','kt','Crane mengangkat beban memakai tali dan banyak roda beralur.'],
+  ['Ramp kursi roda','bm','Permukaannya landai untuk naik ke tempat lebih tinggi.'],['Sekrup','bm','Ulir sekrup adalah bidang miring yang dililitkan.'],['Kapak','bm','Mata kapak berbentuk baji, dua bidang miring.'],
+  ['Setir mobil','rp','Lingkaran besar dan batang kecil berputar bersama.'],['Obeng','rp','Gagang tebal dan batang tipis berputar bersama.'],['Gagang pintu','rp','Kenop besar memutar batang kunci yang kecil.']
+];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+let quizMode='pg',quiz,sortG;
+function newQuiz(){
+  quiz={i:0,score:0,answers:[],wrong:[],picked:null,list:shuffle(BANK).slice(0,10).map(it=>{const ord=shuffle([0,1,2,3]);return{...it,opts:ord.map(k=>it.opts[k]),a:ord.indexOf(0)};})};
+}
+function renderPG(){
+  const Q=quiz,area=$('#qarea');
+  if(Q.i>=Q.list.length){
+    const n=Q.list.length,s=Q.score;
+    const msg=s===n?'Sempurna! Kamu udah siap jadi insinyur cilik 🏆':s>=8?'Keren banget! Tinggal sedikit lagi sempurna 🔥':s>=6?'Lumayan! Coba ulangi percobaan di lab, lalu kuis lagi, ya 💪':'Nggak apa-apa, ini justru kesempatan belajar. Main lagi di lab, terus coba kuis sekali lagi 🙌';
+    area.innerHTML=`<div class="qcard result"><p class="k" style="color:var(--ink2)">Skor kamu</p><div class="num">${s}/${n}</div><p class="qtext">${msg}</p><div class="btnrow two" style="width:min(100%,36rem)"><button class="btn primary" data-q="restart">Ulangi, soal diacak</button><button class="btn" data-q="review"${Q.wrong.length?'':' disabled'}>Lihat pembahasan yang salah</button></div><div class="review" id="review"></div></div>`;
+    return;
+  }
+  const it=Q.list[Q.i];
+  area.innerHTML=`<div class="qcard">
+    <div class="progress">${Q.list.map((_,k)=>`<i class="${k<Q.answers.length?(Q.answers[k]?'ok':'no'):k===Q.i?'now':''}"></i>`).join('')}</div>
+    <div class="qmeta"><span class="pill">Soal ${Q.i+1} dari ${Q.list.length}</span><span class="pill">${it.topic}</span><span class="pill">${it.lv}</span><span class="score">Skor: ${Q.score}</span></div>
+    <p class="qtext">${it.q}</p>
+    <div class="opts">${it.opts.map((o,k)=>`<button class="opt" data-o="${k}"><b>${'ABCD'[k]}</b><span>${o}</span></button>`).join('')}</div>
+    <div id="qexp"></div></div>`;
+}
+function answerPG(k){
+  const Q=quiz;if(Q.picked!==null)return;const it=Q.list[Q.i],ok=k===it.a;
+  Q.picked=k;Q.answers.push(ok);if(ok)Q.score++;else Q.wrong.push({...it,picked:k});
+  $$('.opt').forEach((b,idx)=>{b.disabled=true;if(idx===it.a)b.classList.add('right');else if(idx===k)b.classList.add('wrong');});
+  const last=Q.i===Q.list.length-1;
+  $('#qexp').innerHTML=`<div class="explain ${ok?'ok':'no'}"><p><strong>${ok?'Mantap, benar! 🎉':'Belum tepat, nggak apa-apa 🙂'}</strong>${it.exp}</p><button class="btn primary" data-q="next">${last?'Lihat hasil':'Lanjut'}</button></div>`;
+  $('.qmeta .score').textContent='Skor: '+Q.score;
+  $('#qexp').scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'nearest'});
+}
+function newSort(){sortG={items:shuffle(ITEMS.map((x,i)=>({id:i,name:x[0],bin:x[1],hint:x[2]}))),placed:{},sel:null,missed:new Set(),hint:'Ketuk salah satu alat dulu.',hintCls:''};}
+function renderSort(){
+  const S=sortG,area=$('#qarea'),left=S.items.filter(it=>!(it.id in S.placed)),total=S.items.length;
+  const first=Object.keys(S.placed).filter(id=>!S.missed.has(+id)).length,done=left.length===0;
+  area.innerHTML=`<div class="qcard wide">
+    <div class="qmeta"><span class="pill">Ketuk alat, lalu ketuk kotak kelompoknya</span><span class="pill">Sisa ${left.length} alat</span><span class="score">Benar di percobaan pertama: ${first}/${total}</span></div>
+    <div class="tokens">${done?`<p class="qtext">Semua alat sudah masuk kelompok! Skor kamu ${first}/${total} 🎉</p>`:left.map(it=>`<button class="token" data-t="${it.id}" aria-pressed="${S.sel===it.id}">${it.name}</button>`).join('')}</div>
+    <p class="sorthint ${S.hintCls}">${S.hint}</p>
+    <div class="bins ${S.sel!==null?'armed':''}">${BINS.map(b=>`<button class="bin" data-b="${b.id}"><strong>${b.name}</strong><small>${b.sub}</small>${S.items.filter(it=>S.placed[it.id]===b.id).map(it=>`<span class="got">${it.name}</span>`).join('')}</button>`).join('')}</div>
+    ${done?'<button class="btn primary" data-s="restart" style="align-self:center">Main lagi, diacak</button>':''}</div>`;
+}
+function renderQuizArea(){
+  $$('#quiz-mode button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===quizMode)));
+  quizMode==='pg'?renderPG():renderSort();
+}
+function initQuiz(){
+  newQuiz();newSort();
+  $('#quiz-mode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;quizMode=b.dataset.m;renderQuizArea();});
+  $('#qarea').addEventListener('click',e=>{
+    const opt=e.target.closest('.opt');if(opt&&!opt.disabled){answerPG(+opt.dataset.o);return;}
+    const q=e.target.closest('[data-q]');
+    if(q){const act=q.dataset.q;
+      if(act==='next'){quiz.i++;quiz.picked=null;renderPG();$('#qarea').scrollTop=0;}
+      if(act==='restart'){newQuiz();renderPG();}
+      if(act==='review'){$('#review').innerHTML=quiz.wrong.map(w=>`<div><b>${w.q}</b><br>Jawabanmu: ${w.opts[w.picked]}<br>Jawaban tepat: <b>${w.opts[w.a]}</b><br><span style="color:var(--ink2)">${w.exp}</span></div>`).join('');}
+      return;}
+    const t=e.target.closest('.token');
+    if(t){sortG.sel=sortG.sel===+t.dataset.t?null:+t.dataset.t;sortG.hint=sortG.sel===null?'Ketuk salah satu alat dulu.':'Sekarang ketuk kotak kelompoknya 👇';sortG.hintCls='';renderSort();return;}
+    const bin=e.target.closest('.bin');
+    if(bin){
+      if(sortG.sel===null){sortG.hint='Pilih alatnya dulu, baru ketuk kotaknya.';sortG.hintCls='no';renderSort();return;}
+      const it=sortG.items.find(x=>x.id===sortG.sel);
+      if(it.bin===bin.dataset.b){sortG.placed[it.id]=it.bin;sortG.sel=null;sortG.hint=`Tepat! ${it.name} masuk ${BINS.find(b=>b.id===it.bin).name}.`;sortG.hintCls='ok';renderSort();}
+      else{sortG.missed.add(it.id);sortG.hint=`Hmm, belum pas. Petunjuk: ${it.hint}`;sortG.hintCls='no';renderSort();
+        const tk=$(`.token[data-t="${it.id}"]`);if(tk){tk.classList.add('shake');}}
+      return;}
+    if(e.target.closest('[data-s="restart"]')){newSort();renderSort();}
+  });
+}
+
+/* =====================================================
+   NAVIGASI & INIT
+   ===================================================== */
+let active='tuas';
+function go(v){
+  active=v;
+  $$('.view').forEach(s=>s.classList.toggle('active',s.dataset.view===v));
+  $$('.nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.go===v?'page':'false'));
+  if(v==='tabel')renderTables();
+  if(v==='kuis')renderQuizArea();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go);});
+const RECORD={tuas:tuasRecord,katrol:katrolRecord,bm:bmRecord,rp:rpRecord};
+const RESET={tuas:tuasReset,katrol:katrolReset,bm:bmReset,rp:rpReset};
+$$('[data-record]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.record,n=RECORD[k]();toast(`Tercatat! Data ${TDEF[k].title.toLowerCase()} ke-${n} masuk tabel ✓`);}));
+$$('[data-reset]').forEach(b=>b.addEventListener('click',()=>{RESET[b.dataset.reset]();toast('Percobaan diulang dari awal.');}));
+
+$('#btn-tebak').addEventListener('click',e=>{
+  const on=document.body.classList.toggle('tebak');e.currentTarget.setAttribute('aria-pressed',String(on));
+  peeks.clear();$$('.ans.peek').forEach(el=>el.classList.remove('peek'));
+  toast(on?'Mode tebak nyala: angka hasil diburamkan. Tebak dulu, lalu ketuk angkanya.':'Mode tebak mati: semua angka ditampilkan.');
+});
+$('#btn-fs').addEventListener('click',()=>{
+  const d=document,el=d.documentElement;
+  const fail=()=>toast(EMBEDDED
+    ?'Layar penuh diblokir oleh website induk. Tambahkan allowfullscreen pada iframe, atau ketuk "Tab baru".'
+    :'Layar penuh tidak didukung di browser ini. Coba tekan F11.');
+  try{
+    if(!d.fullscreenElement&&!d.webkitFullscreenElement){
+      const f=el.requestFullscreen||el.webkitRequestFullscreen;
+      if(!f)return fail();
+      const p=f.call(el); if(p&&p.catch)p.catch(fail);
+    }
+    else{const x=d.exitFullscreen||d.webkitExitFullscreen;x&&x.call(d);}
+  }catch(_){fail();}
+});
+const help=$('#help');
+$('#btn-help').addEventListener('click',()=>help.classList.add('show'));
+$('#help-close').addEventListener('click',()=>help.classList.remove('show'));
+help.addEventListener('click',e=>{if(e.target===help)help.classList.remove('show');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')help.classList.remove('show');});
+document.addEventListener('contextmenu',e=>{if(!e.target.closest('input'))e.preventDefault();});
+
+/* =====================================================
+   EMBED — supaya lab ini bisa ditampilkan di website mana pun
+   ===================================================== */
+$('#btn-pop').addEventListener('click',()=>{
+  const w=window.open(location.href,'_blank','noopener');
+  if(!w)toast('Popup diblokir browser. Izinkan popup, lalu coba lagi.');
+});
+function postToHost(type,extra){
+  if(!EMBEDDED)return;
+  try{parent.postMessage(Object.assign({source:'lab-pesawat-sederhana',type},extra||{}),'*');}catch(_){}
+}
+let lastH=0;
+function reportHeight(){
+  const h=Math.ceil(Math.max(document.documentElement.scrollHeight,document.body.scrollHeight));
+  if(h&&Math.abs(h-lastH)>8){lastH=h;postToHost('resize',{height:h});}
+}
+if(EMBEDDED){
+  addEventListener('resize',reportHeight);
+  addEventListener('load',()=>{reportHeight();postToHost('ready',{url:location.href});});
+  if(window.ResizeObserver)new ResizeObserver(reportHeight).observe(document.documentElement);
+  reportHeight();
+}
+
+initTuas();initKatrol();initBM();initRP();initTables();initQuiz();
+let last=performance.now();
+(function loop(t){const dt=Math.min(0.05,(t-last)/1000);last=t;if(active==='tuas')tuasTick(dt);requestAnimationFrame(loop);})(performance.now());
+</script>
+</body></html>

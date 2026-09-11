@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sematkan Lab Pesawat Sederhana di Website Kamu</title>
+<meta name="description" content="Ambil kode embed iframe Lab Pesawat Sederhana untuk Google Sites, Moodle, WordPress, Blogger, Canvas, atau website apa pun.">
+<meta name="theme-color" content="#DCE3E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--wall:#DCE3E8;--hole:#C3CDD6;--ink:#1B2B3A;--ink2:#4B5C6C;--paper:#FBFCFD;--paper2:#EEF2F5;
+  --yellow:#FFC21A;--blue:#1C6FD6;--green:#1F9254;--r-lg:22px;--r-md:14px;--r-sm:10px;
+  --display:'Bricolage Grotesque','Lexend',system-ui,sans-serif;--body:'Lexend',system-ui,'Segoe UI',Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background-color:var(--wall);
+  background-image:radial-gradient(circle at center,var(--hole) 0 2px,transparent 3px);background-size:24px 24px;line-height:1.5}
+.wrap{max-width:64rem;margin:0 auto;padding:32px 16px 64px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.1;letter-spacing:-.01em}
+h2{font-family:var(--display);font-weight:800;font-size:1.35rem;margin:0 0 10px}
+p.lead{color:var(--ink2);margin-top:10px;max-width:60ch}
+.card{background:var(--paper);border:3px solid var(--ink);border-radius:var(--r-lg);box-shadow:0 6px 0 var(--ink);padding:20px;margin-top:24px}
+label{display:block;font-weight:600;font-size:.92rem;margin-bottom:6px}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.row>div{flex:1 1 200px}
+input,select{width:100%;font:inherit;padding:10px 12px;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--paper2)}
+textarea{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem;line-height:1.5;
+  padding:12px;border:2px solid var(--ink);border-radius:var(--r-sm);background:#10202e;color:#E8F0F7;min-height:120px;resize:vertical}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 16px;border:3px solid var(--ink);border-radius:var(--r-md);
+  background:var(--paper);font:inherit;font-weight:600;color:inherit;cursor:pointer;box-shadow:0 4px 0 var(--ink);text-decoration:none}
+.btn:active{transform:translateY(4px);box-shadow:none}
+.btn.primary{background:var(--yellow)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.preview{margin-top:14px;border:3px solid var(--ink);border-radius:var(--r-md);overflow:hidden;background:#fff}
+.preview iframe{display:block;width:100%;border:0}
+ol{padding-left:20px;display:flex;flex-direction:column;gap:8px;margin-top:8px}
+ul{padding-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px}
+code{background:var(--paper2);border:1px solid #cfd8e0;border-radius:6px;padding:1px 6px;font-size:.88em}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tab{min-height:40px;padding:0 14px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);font:inherit;font-weight:600;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.note{font-size:.9rem;color:var(--ink2);margin-top:10px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+  padding:12px 20px;border-radius:999px;font-weight:600;opacity:0;transition:.2s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Sematkan lab ini di website mana pun</h1>
+  <p class="lead">Salin satu potong kode <code>&lt;iframe&gt;</code> di bawah, tempel di Google Sites, Moodle, WordPress, Blogger, Canvas, Notion, atau HTML website sekolah. Labnya jalan penuh di dalam halaman kamu — tanpa install apa pun.</p>
+
+  <div class="card">
+    <h2>1. Atur tampilan</h2>
+    <div class="row">
+      <div>
+        <label for="url">URL lab (otomatis terisi)</label>
+        <input id="url" type="url" spellcheck="false">
+      </div>
+      <div>
+        <label for="mode">Ukuran</label>
+        <select id="mode">
+          <option value="ratio">Responsif (ikut lebar, rasio tetap) — disarankan</option>
+          <option value="fixed">Tinggi tetap (untuk Google Sites / LMS)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <div id="ratio-wrap">
+        <label for="ratio">Rasio</label>
+        <select id="ratio">
+          <option value="16 / 10">16 : 10 (laptop)</option>
+          <option value="16 / 9">16 : 9 (layar lebar)</option>
+          <option value="4 / 3">4 : 3 (proyektor kelas)</option>
+        </select>
+      </div>
+      <div id="height-wrap">
+        <label for="h">Tinggi (px)</label>
+        <input id="h" type="number" min="400" max="1600" step="20" value="760">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Salin kodenya</h2>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-t="html" aria-selected="true">HTML / WordPress</button>
+      <button class="tab" role="tab" data-t="sites" aria-selected="false">Google Sites</button>
+      <button class="tab" role="tab" data-t="lms" aria-selected="false">Moodle / Canvas</button>
+      <button class="tab" role="tab" data-t="link" aria-selected="false">Link langsung</button>
+    </div>
+    <textarea id="code" readonly spellcheck="false"></textarea>
+    <div class="actions">
+      <button class="btn primary" id="copy">Salin kode</button>
+      <a class="btn" id="open" href="./index.html" target="_blank" rel="noopener">Buka lab di tab baru</a>
+    </div>
+    <p class="note" id="tip"></p>
+  </div>
+
+  <div class="card">
+    <h2>3. Pratinjau</h2>
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <div class="card">
+    <h2>Catatan penting</h2>
+    <ul>
+      <li><b>Layar penuh:</b> iframe wajib punya atribut <code>allowfullscreen</code> (sudah ada di kode di atas), kalau tidak tombol "Layar penuh" akan diblokir website induk.</li>
+      <li><b>Unduh CSV:</b> aktif selama host tidak memakai <code>sandbox</code> tanpa <code>allow-downloads</code>.</li>
+      <li><b>Auto-resize:</b> lab mengirim tinggi konten ke halaman induk lewat <code>postMessage</code> (<code>{source:'lab-pesawat-sederhana', type:'resize', height}</code>). Host yang mendukung bisa menyesuaikan tinggi iframe otomatis.</li>
+      <li><b>HTTPS:</b> pakai URL https (GitHub Pages sudah https) supaya tidak diblokir website yang juga https.</li>
+    </ul>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const base=new URL('./index.html',location.href).href;
+$('#url').value=base;
+$('#open').href=base;
+
+const TIPS={
+  html:'Tempel di editor HTML (WordPress: blok "HTML Kustom", Blogger: mode HTML).',
+  sites:'Google Sites: menu Sisipkan → Sematkan → tab "Kode sematan" → tempel → Berikutnya → Sisipkan. Google Sites butuh tinggi tetap, jadi mode ini otomatis dipakai.',
+  lms:'Moodle: ikon <> (kode sumber) di editor. Canvas: Edit HTML pada Rich Content Editor. Pastikan filter HTML tidak menghapus iframe.',
+  link:'Cara paling aman kalau iframe diblokir LMS: bagikan link ini ke siswa (bisa dijadikan QR code).'
+};
+let tab='html';
+
+function snippet(){
+  const url=$('#url').value.trim()||base;
+  const mode=$('#mode').value;
+  const ratio=$('#ratio').value;
+  const h=Math.max(300,+$('#h').value||760);
+  const common='src="'+url+'" title="Lab Pesawat Sederhana" loading="lazy" allowfullscreen allow="fullscreen; clipboard-write" referrerpolicy="no-referrer-when-downgrade"';
+  if(tab==='link')return url;
+  if(tab==='sites'||mode==='fixed'){
+    return '<iframe '+common+' width="100%" height="'+h+'" style="width:100%;height:'+h+'px;border:0;border-radius:16px"></iframe>';
+  }
+  if(tab==='lms'){
+    return '<iframe '+common+' width="100%" height="'+h+'" style="width:100%;height:'+h+'px;border:0"></iframe>';
+  }
+  return '<div style="position:relative;width:100%;aspect-ratio:'+ratio+';min-height:520px">\n'
+       + '  <iframe '+common+' style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:16px"></iframe>\n'
+       + '</div>';
+}
+function render(){
+  const mode=$('#mode').value, forceFixed=(tab==='sites'||tab==='lms');
+  $('#ratio-wrap').style.display=(mode==='ratio'&&!forceFixed)?'':'none';
+  $('#height-wrap').style.display=(mode==='fixed'||forceFixed)?'':'none';
+  $('#code').value=snippet();
+  $('#tip').textContent=TIPS[tab];
+  $('#preview').innerHTML = tab==='link'
+    ? '<div style="position:relative;width:100%;aspect-ratio:16 / 10;min-height:520px"><iframe src="'+$('#url').value+'" title="Pratinjau" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>'
+    : snippet();
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===b)));
+  tab=b.dataset.t;render();
+}));
+['#url','#mode','#ratio','#h'].forEach(s=>$(s).addEventListener('input',render));
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+$('#copy').addEventListener('click',async()=>{
+  const t=$('#code');
+  try{await navigator.clipboard.writeText(t.value);toast('Kode tersalin ✓');}
+  catch(e){t.focus();t.select();let ok=false;try{ok=document.execCommand('copy');}catch(_){}toast(ok?'Kode tersalin ✓':'Salin manual ya (Ctrl/Cmd + C).');}
+});
+// terima laporan tinggi dari lab (contoh auto-resize)
+addEventListener('message',e=>{
+  const d=e.data;
+  if(!d||d.source!=='lab-pesawat-sederhana'||d.type!=='resize')return;
+  const f=$('#preview').querySelector('iframe');
+  if(f&&$('#mode').value==='fixed'&&tab!=='link')f.style.height=Math.min(1400,Math.max(400,d.height))+'px';
+});
+render();
+</script>
+</body>
+</html>
