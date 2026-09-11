@@ -20,8 +20,8 @@ Satu file HTML mandiri, **tanpa build, tanpa server, tanpa dependensi** — dan 
 4. Tunggu ~1 menit. URL-nya:
 
 ```
-https://<username>.github.io/<nama-repo>/            → labnya
-https://<username>.github.io/<nama-repo>/embed.html  → generator kode embed
+https://mathiasbagas11-ai.github.io/Virtual-Lab-Pesawat-Sederhana/            → labnya
+https://mathiasbagas11-ai.github.io/Virtual-Lab-Pesawat-Sederhana/embed.html  → generator kode embed
 ```
 
 Alternatif hosting (semua gratis, tinggal drag-and-drop `index.html`): Netlify Drop, Vercel, Cloudflare Pages.
@@ -31,13 +31,13 @@ Syarat penting: host harus **HTTPS** dan tidak mengirim header `X-Frame-Options:
 
 Cara cepat: buka `embed.html`, atur ukuran, klik **Salin kode**.
 
-Atau pakai langsung snippet ini (ganti URL-nya):
+Atau pakai langsung snippet ini (URL-nya sudah sesuai repo ini):
 
 **Responsif (disarankan — untuk website/WordPress/Blogger)**
 
 ```html
 <div style="position:relative;width:100%;aspect-ratio:16 / 10;min-height:520px">
-  <iframe src="https://USERNAME.github.io/REPO/"
+  <iframe src="https://mathiasbagas11-ai.github.io/Virtual-Lab-Pesawat-Sederhana/"
           title="Lab Pesawat Sederhana" loading="lazy"
           allowfullscreen allow="fullscreen; clipboard-write"
           style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:16px"></iframe>
@@ -47,7 +47,7 @@ Atau pakai langsung snippet ini (ganti URL-nya):
 **Tinggi tetap (untuk Google Sites, Moodle, Canvas, LMS)**
 
 ```html
-<iframe src="https://USERNAME.github.io/REPO/"
+<iframe src="https://mathiasbagas11-ai.github.io/Virtual-Lab-Pesawat-Sederhana/"
         title="Lab Pesawat Sederhana" width="100%" height="760"
         allowfullscreen allow="fullscreen; clipboard-write"
         style="width:100%;height:760px;border:0"></iframe>
